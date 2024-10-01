@@ -8,24 +8,37 @@ import { useRegistrationForm } from "../../hooks/form/useRegistrationForm"
 import { useForm } from "react-hook-form"
 import { useValidationForm } from "../../hooks/form/useValidationForm"
 import { FormValues } from '../../interfaces/registration.interfaces';
+import { createPatient, fetchHealthAmbassadors } from "../../services/registration.services"
+import { useEffect, useState } from "react"
 
 export const RegistrationForm = () => {
 
-    const { handleSubmit, control, formState: { errors }, register } = useForm<FormValues>();
+    const { handleSubmit, formState: { errors }, register } = useForm<FormValues>();
     const { children, addChild, updateChild, removeChild } = useRegistrationForm();
-    const { NAME, LAST_NAME, EMAIL, PHONE, AGE, DOB, SEX, FULL_ADDRESS, HIV_TEST_DATE, SOCIAL_SECURITY, TEST_RESULT, BEST_CONTACT_HOUR } = useValidationForm();
+    const { NAME, LAST_NAME, EMAIL, PHONE, AGE, DOB, FULL_ADDRESS, HIV_TEST_DATE, SOCIAL_SECURITY, BEST_CONTACT_HOUR } = useValidationForm();
 
-    const onSubmit = (data: any) => {
-        console.log(data);
-        // Aquí iría la lógica para enviar los datos del formulario
+    const [healthAmbassadors, setHealthAmbassadors] = useState([]);
+
+    useEffect(() => {
+        const loadAmbassadors = async () => {
+            const ambassadors = await fetchHealthAmbassadors();
+            setHealthAmbassadors(ambassadors);
+        };
+        loadAmbassadors();
+    }, []);
+
+    console.log(healthAmbassadors);
+
+    const onSubmit = async (data: FormValues) => {
+        await createPatient(data);
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-2xl mx-auto p-6 bg-white rounded-lg shadow">
-            <div>
+            {/* <div>
                 <Label htmlFor="healthAmbassador">Health Ambassador</Label>
                 <Input id="healthAmbassador" placeholder="Enter health ambassador name" />
-            </div>
+            </div> */}
 
             <div>
                 <Label htmlFor="linkageDate">Linkage Date</Label>
@@ -54,16 +67,22 @@ export const RegistrationForm = () => {
             <div className="grid grid-cols-3 gap-4">
                 <div>
                     <Label htmlFor="dob">Date of Birth</Label>
-                    <Input 
-                    id="dob" 
-                    type="date" 
-                    {...register("dob", DOB)}
+                    <Input
+                        id="dob"
+                        type="date"
+                        {...register("dob", DOB)}
                     />
                     {errors.dob && <p className="text-red-500">{errors.dob.message}</p>}
                 </div>
                 <div>
                     <Label htmlFor="age">Age</Label>
-                    <Input id="age" type="number" placeholder="Enter age" />
+                    <Input
+                        id="age"
+                        type="number"
+                        placeholder="Enter age"
+                        {...register("age", AGE)}
+                    />
+                    {errors.age && <p className="text-red-500">{errors.age.message}</p>}
                 </div>
                 <div>
                     <Label htmlFor="sex">Sex</Label>
@@ -83,10 +102,10 @@ export const RegistrationForm = () => {
 
             <div>
                 <Label htmlFor="fullAddress">Full Address</Label>
-                <Input 
-                id="fullAddress" 
-                placeholder="Enter full address" 
-                {...register("fullAddress", FULL_ADDRESS)}
+                <Input
+                    id="fullAddress"
+                    placeholder="Enter full address"
+                    {...register("fullAddress", FULL_ADDRESS)}
                 />
                 {errors.fullAddress && <p className="text-red-500">{errors.fullAddress.message}</p>}
             </div>
@@ -94,27 +113,29 @@ export const RegistrationForm = () => {
             <div className="grid grid-cols-2 gap-4">
                 <div>
                     <Label htmlFor="email">Email</Label>
-                    <Input 
-                    id="email" 
-                    type="email" 
-                    placeholder="Enter email" 
-                    {...register("email", EMAIL)}
+                    <Input
+                        id="email"
+                        type="email"
+                        placeholder="Enter email"
+                        {...register("email", EMAIL)}
                     />
                     {errors.email && <p className="text-red-500">{errors.email.message}</p>}
                 </div>
                 <div>
                     <Label htmlFor="phone">Phone</Label>
-                    <Input id="phone" 
-                    type="tel" 
-                    placeholder="Enter phone number"
-                    {...register("phone", PHONE)} 
+                    <Input id="phone"
+                        type="tel"
+                        placeholder="Enter phone number"
+                        {...register("phone", PHONE)}
                     />
                     {errors.phone && <p className="text-red-500">{errors.phone.message}</p>}
                 </div>
             </div>
 
             <div>
-                <Label>Children (under 18)</Label>
+                <div className="mr-5">
+                    <Label>Children (under 18)</Label>
+                </div>
                 {children.map((child, index) => (
                     <div key={index} className="grid grid-cols-4 gap-2 mt-2 items-end">
                         <Input
@@ -151,10 +172,10 @@ export const RegistrationForm = () => {
 
             <div>
                 <Label htmlFor="hivTestDate">HIV Test Date</Label>
-                <Input 
-                id="hivTestDate" 
-                type="date" 
-                {...register("hivTestDate", HIV_TEST_DATE)}
+                <Input
+                    id="hivTestDate"
+                    type="date"
+                    {...register("hivTestDate", HIV_TEST_DATE)}
                 />
                 {errors.hivTestDate && <p className="text-red-500">{errors.hivTestDate.message}</p>}
             </div>
@@ -166,10 +187,10 @@ export const RegistrationForm = () => {
 
             <div>
                 <Label htmlFor="socialSecurity">Social Security</Label>
-                <Input 
-                id="socialSecurity" 
-                placeholder="Enter social security number"
-                {...register("socialSecurity", SOCIAL_SECURITY)} 
+                <Input
+                    id="socialSecurity"
+                    placeholder="Enter social security number"
+                    {...register("socialSecurity", SOCIAL_SECURITY)}
                 />
                 {errors.socialSecurity && <p className="text-red-500">{errors.socialSecurity.message}</p>}
             </div>
@@ -191,10 +212,10 @@ export const RegistrationForm = () => {
 
             <div>
                 <Label htmlFor="bestContactHour">Best Contact Hour</Label>
-                <Input 
-                id="bestContactHour" 
-                placeholder="Enter best contact hour" 
-                {...register("bestContactHour", BEST_CONTACT_HOUR)}
+                <Input
+                    id="bestContactHour"
+                    placeholder="Enter best contact hour"
+                    {...register("bestContactHour", BEST_CONTACT_HOUR)}
                 />
                 {errors.bestContactHour && <p className="text-red-500">{errors.bestContactHour.message}</p>}
             </div>

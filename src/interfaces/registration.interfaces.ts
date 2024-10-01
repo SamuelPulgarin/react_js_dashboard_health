@@ -17,6 +17,7 @@ export interface FormValues {
     socialSecurity: string;
     testResult: string;
     bestContactHour: string;
+    healthAmbassador: string;
     children: {
         name: string;
         dob: string;
