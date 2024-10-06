@@ -1,5 +1,4 @@
-import { LogIn } from '@/components/appwrite/LogIn'
-
+import { LogIn } from '@/components/auth/LogIn'
 
 export const LogInPage = () => {
   return (

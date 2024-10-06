@@ -1,32 +1,20 @@
 import { useState } from "react"
-import { Child } from '../../interfaces/registration.interfaces';
+import { FormValues } from "../../interfaces/registration.interfaces";
+import { createPatient } from "../../services/registration.services";
+
 
 export const useRegistrationForm = () => {
 
-    const [children, setChildren] = useState<Child[]>([])
+    const [loading, setLoading] = useState<boolean>(false);
 
-    const addChild = () => {
-        setChildren([...children, { name: '', dob: '', sex: '' }])
-    }
-    
-    const updateChild = (index: number, field: keyof Child, value: string) => {
-        const updatedChildren = children.map((child, i) => {
-            if (i === index) {
-                return { ...child, [field]: value }
-            }
-            return child
-        })
-        setChildren(updatedChildren)
-    }
-    
-    const removeChild = (index: number) => {
-        setChildren(children.filter((_, i) => i !== index))
+    const registerPatient = async(data: FormValues, navigate: Function) => {
+        setLoading(true);
+        await createPatient(data, navigate);
+        setLoading(false);
     }
 
     return {
-        children,
-        addChild,
-        updateChild,
-        removeChild
+        registerPatient,
+        loading
     }
 } 

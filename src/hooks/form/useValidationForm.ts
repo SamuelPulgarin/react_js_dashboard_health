@@ -1,4 +1,19 @@
 export const useValidationForm = () => {
+
+    const HEALT_AMBASSADORS = {
+        required: {
+            value: true,
+            message: "Please select a health ambassador",
+        }
+    };
+
+    const LINKAGE_DATE = {
+        required: {
+            value: true,
+            message: "HIV test date is required",
+        },
+    };
+
     const NAME = {
         required: {
             value: true,
@@ -140,6 +155,8 @@ export const useValidationForm = () => {
     };
 
     return {
+        HEALT_AMBASSADORS,
+        LINKAGE_DATE,
         NAME,
         LAST_NAME,
         EMAIL,

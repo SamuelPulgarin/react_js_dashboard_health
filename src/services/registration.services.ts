@@ -1,22 +1,27 @@
 import { FormValues } from "../interfaces/registration.interfaces";
 import { databases, ID } from "../lib/appwrite/config";
+import { toast } from 'react-hot-toast';
 
 // Función para crear un nuevo paciente
-export const createPatient = async (data: FormValues) => {
+export const createPatient = async (data: FormValues, navigate: Function) => {
+
+    //const navigate = useNavigate();
+
     try {
         const patient = await databases.createDocument(`66f8843900293602ad8f`, '66f89ac7002b428ca133', ID.unique(), {
             name: data.name,
-            lastName: data.lastName,
+            last_name: data.last_name,
             dob: data.dob,
-            age: data.age,
+            age: Number(data.age),
             sex: data.sex,
-            fullAddress: data.fullAddress,
+            full_address: data.full_address,
             email: data.email,
             phone: data.phone,
-            hivTestDate: data.hivTestDate,
-            socialSecurity: data.socialSecurity,
-            testResult: data.testResult,
-            bestContactHour: data.bestContactHour,
+            linkage_date: data.linkage_date,
+            hiv_test: data.hiv_test,
+            social_security: data.social_security,
+            test_result: data.test_result,
+            best_contact_hour: data.best_contact_hour,
             healthAmbassadors: data.healthAmbassador // relationship
         });
 
@@ -32,9 +37,14 @@ export const createPatient = async (data: FormValues) => {
             }
         }
 
-        console.log('Patient created successfully', patient);
+        toast.success('Patient created successfully!');
+        navigate('/dashboard')
+        // console.log('Patient created successfully', patient);
+        //navigate('/dashboard')
     } catch (error) {
+        toast.error('Error creating patient. Please try again.');
         console.error('Error creating patient:', error);
+        navigate('/dashboard')
     }
 };
 
