@@ -1,6 +1,6 @@
 # React + TypeScript + Vite
 
-### This project is designed to manage and visualize data related to the registration of patients who have been evaluated for HIV. Using React.js, we have created an interactive application that allows healthcare professionals to record essential patient information, such as gender, age, medical history, and test results.
+###### This project is designed to manage and visualize data related to the registration of patients who have been evaluated for HIV. Using React.js, we have created an interactive application that allows healthcare professionals to record essential patient information, such as gender, age, medical history, and test results.
 
 ## Project Setup
 

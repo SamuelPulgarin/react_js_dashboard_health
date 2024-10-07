@@ -36,32 +36,29 @@ export const Dashboard = ({ patients }: Props) => {
   const [maxAge, setMaxAge] = useState<string>("65");
   const [sex, setSex] = useState<string>("all");
 
-  // Función para filtrar pacientes
   const filteredPatients = useMemo(() => {
     return patients.filter((patient) => {
-      // Verificar si las fechas son válidas
+
       if (!date?.from || !date?.to) return false;
 
-      // Validar que la fecha de vínculo esté dentro del rango de fechas
+      // Check Date Range
       const linkageDate = new Date(patient.linkage_date);
       const isWithinDateRange =
         linkageDate >= date.from && linkageDate <= date.to;
 
-      // Validar que la edad esté dentro del rango
       const isWithinAgeRange =
         patient.age >= parseInt(minAge, 10) && patient.age <= parseInt(maxAge, 10);
 
-      // Validar sexo
       const isSexMatch = sex === "all" || patient.sex === sex;
 
       return isWithinDateRange && isWithinAgeRange && isSexMatch;
     });
   }, [patients, date, minAge, maxAge, sex]);
 
-  // Formatear los datos para las gráficas
+  // Format data
   const chartData = filteredPatients.map((patient) => ({
     name: patient.name,
-    value: patient.age, // Puedes ajustar este valor según lo que desees graficar
+    value: patient.age,
   }));
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
@@ -152,7 +149,6 @@ export const Dashboard = ({ patients }: Props) => {
         </div>
       </div>
 
-      {/* Gráficas con datos filtrados */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-white p-4 rounded-lg shadow">
           <h2 className="text-lg font-semibold mb-4">Bar Chart</h2>
