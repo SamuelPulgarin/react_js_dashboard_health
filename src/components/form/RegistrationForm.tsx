@@ -234,7 +234,6 @@ export const RegistrationForm = () => {
                                 <SelectContent>
                                     <SelectItem value="NEGATIVE">NEGATIVE</SelectItem>
                                     <SelectItem value="POSITIVE">POSITIVE</SelectItem>
-                                    <SelectItem value="INCONCLUSIVE">INCONCLUSIVE</SelectItem>
                                 </SelectContent>
                             </Select>
                             {errors.test_result && <p className="text-red-500">{errors.test_result.message}</p>}

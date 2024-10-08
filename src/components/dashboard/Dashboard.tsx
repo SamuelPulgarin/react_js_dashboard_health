@@ -1,70 +1,60 @@
-import { useState, useMemo } from "react"
-import { addDays, format, isWithinInterval } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
-import { DateRange } from "react-day-picker"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell, LineChart, Line, AreaChart, Area } from "recharts"
+import React, { useMemo } from "react";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+} from "recharts";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { Input } from "@/components/ui/input"
-import { Patient } from '../../interfaces/patient.interfaces';
+} from "@/components/ui/popover";
+import { Input } from "@/components/ui/input";
+import { Patient } from "../../interfaces/patient.interfaces";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
+import { useFilteredPatients } from "../../hooks/dashboard/useFilteredPatients";
+import { getAreaChartData, getBarChartData, getLineChartData, getPieChartData } from "../../utils/dashboard.utils";
 
 interface Props {
   patients: Patient[];
 }
 
-
 export const Dashboard = ({ patients }: Props) => {
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(),
-    to: addDays(new Date(), 7),
-  });
-  const [minAge, setMinAge] = useState<string>("18");
-  const [maxAge, setMaxAge] = useState<string>("65");
-  const [sex, setSex] = useState<string>("all");
 
-  const filteredPatients = useMemo(() => {
-    return patients.filter((patient) => {
+  const { filteredPatients, date, setDate, minAge, setMinAge, maxAge, setMaxAge, sex, setSex } = useFilteredPatients(patients);
 
-      if (!date?.from || !date?.to) return false;
+  const barChartData = getBarChartData(filteredPatients);
+  const pieChartData = getPieChartData(filteredPatients);
+  const lineChartData = getLineChartData(filteredPatients);
+  const areaChartData = useMemo(() => getAreaChartData(filteredPatients), [filteredPatients]);
 
-      // Check Date Range
-      const linkageDate = new Date(patient.linkage_date);
-      const isWithinDateRange =
-        linkageDate >= date.from && linkageDate <= date.to;
-
-      const isWithinAgeRange =
-        patient.age >= parseInt(minAge, 10) && patient.age <= parseInt(maxAge, 10);
-
-      const isSexMatch = sex === "all" || patient.sex === sex;
-
-      return isWithinDateRange && isWithinAgeRange && isSexMatch;
-    });
-  }, [patients, date, minAge, maxAge, sex]);
-
-  // Format data
-  const chartData = filteredPatients.map((patient) => ({
-    name: patient.name,
-    value: patient.age,
-  }));
-
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   return (
-    <div className="p-8">
+    <div className="mx-auto py-10">
       <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -119,14 +109,14 @@ export const Dashboard = ({ patients }: Props) => {
               type="number"
               placeholder="Min Age"
               value={minAge}
-              onChange={(e) => setMinAge(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMinAge(e.target.value)}
               className="w-1/2"
             />
             <Input
               type="number"
               placeholder="Max Age"
               value={maxAge}
-              onChange={(e) => setMaxAge(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMaxAge(e.target.value)}
               className="w-1/2"
             />
           </div>
@@ -150,9 +140,10 @@ export const Dashboard = ({ patients }: Props) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Bar Chart */}
         <div className="bg-white p-4 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Bar Chart</h2>
-          <BarChart width={400} height={300} data={chartData}>
+          <h2 className="text-lg font-semibold mb-4">Bar Chart: Sex Distribution</h2>
+          <BarChart width={400} height={300} data={barChartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
@@ -162,11 +153,12 @@ export const Dashboard = ({ patients }: Props) => {
           </BarChart>
         </div>
 
+        {/* Pie Chart */}
         <div className="bg-white p-4 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Pie Chart</h2>
+          <h2 className="text-lg font-semibold mb-4">Pie Chart: Test Results</h2>
           <PieChart width={400} height={300}>
             <Pie
-              data={chartData}
+              data={pieChartData}
               cx={200}
               cy={150}
               labelLine={false}
@@ -174,8 +166,11 @@ export const Dashboard = ({ patients }: Props) => {
               fill="#8884d8"
               dataKey="value"
             >
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              {pieChartData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
               ))}
             </Pie>
             <Tooltip />
@@ -183,30 +178,44 @@ export const Dashboard = ({ patients }: Props) => {
           </PieChart>
         </div>
 
+        {/* Line Chart */}
         <div className="bg-white p-4 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Line Chart</h2>
-          <LineChart width={400} height={300} data={chartData}>
+          <h2 className="text-lg font-semibold mb-4">Line Chart: Age Distribution by Range</h2>
+          <LineChart width={400} height={300} data={lineChartData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <XAxis dataKey="ageRange" />
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="value" stroke="#8884d8" />
+            <Line type="monotone" dataKey="count" stroke="#8884d8" />
           </LineChart>
         </div>
 
+        {/* Area Chart */}
         <div className="bg-white p-4 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Area Chart</h2>
-          <AreaChart width={400} height={300} data={chartData}>
+          <h2 className="text-lg font-semibold mb-4">Area Chart: Patients with Children by Age Range</h2>
+          <AreaChart
+            width={400}
+            height={300}
+            data={areaChartData}
+            margin={{
+              top: 10,
+              right: 30,
+              left: 0,
+              bottom: 0,
+            }}
+          >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <XAxis dataKey="ageRange" />
             <YAxis />
             <Tooltip />
             <Legend />
-            <Area type="monotone" dataKey="value" stroke="#8884d8" fill="#8884d8" />
+            <Area type="monotone" dataKey="count" stroke="#8884d8" fill="#8884d8" />
           </AreaChart>
         </div>
+
       </div>
     </div>
   );
 };
+
