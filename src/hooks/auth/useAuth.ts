@@ -28,10 +28,8 @@ export const useAuth = () => {
 
   const handleSubmit = async () => {
     await login(email, password);
-    if (user) {
-      toast.success(`¡Welcome ${user.name}!`);
-      navigate('/dashboard');
-    }
+    toast.success(`¡Success log in!`);
+    navigate('/dashboard');
   };
 
   const handleLogout = async() => {
