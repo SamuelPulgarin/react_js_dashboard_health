@@ -3,17 +3,24 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Home, Menu, Settings, Users } from "lucide-react";
+import { Home, Menu, Settings, Users, LogOut } from "lucide-react";
+import { useAuth } from "../../hooks/auth/useAuth";
+
 
 const sidebarItems = [
-  { name: "Inicio", href: "/dashboard", icon: Home },
-  { name: "Beneficiarios", href: "/register", icon: Users },
-  { name: "Viaticos", href: "/settings", icon: Settings },
+  { name: "Home", href: "/dashboard", icon: Home },
+  { name: "Beneficiaries", href: "/register", icon: Users },
+  { name: "Travel", href: "/settings", icon: Settings },
 ];
 
 export const SidebarMenu = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const { handleLogout } = useAuth();
+
+  const handleLogoutFunction = () => {
+    handleLogout();
+  };
 
   return (
     <>
@@ -42,6 +49,12 @@ export const SidebarMenu = () => {
                 </Link>
               );
             })}
+
+            {/* Botón de Log Out */}
+            <Button variant="ghost" className="w-full justify-start" onClick={handleLogout}>
+              <LogOut className="mr-2 h-5 w-5" />
+              Log Out
+            </Button>
           </nav>
         </SheetContent>
       </Sheet>
@@ -64,6 +77,12 @@ export const SidebarMenu = () => {
                 </Link>
               );
             })}
+
+            {/* Botón de Log Out en el sidebar de escritorio */}
+            <Button variant="ghost" className="w-full justify-start" onClick={handleLogoutFunction}>
+              <LogOut className="mr-2 h-5 w-5" />
+              Log Out
+            </Button>
           </nav>
         </ScrollArea>
       </aside>

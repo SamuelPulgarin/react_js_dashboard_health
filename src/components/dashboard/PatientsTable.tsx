@@ -2,6 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2 } from "lucide-react";
 import { Patient } from "../../interfaces/patient.interfaces";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
     patients: Patient[];
@@ -9,20 +10,11 @@ interface Props {
 
 export const PatientsTable = ({ patients }: Props) => {
 
-    const handleEdit = (id: string) => {
-        console.log(`Editando paciente con id ${id}`);
-    };
-
-    const handleDelete = (id: string) => {
-        //setPatients(patients.filter((patient) => patient.$id !== id));
-        console.log(`Paciente con id ${id} eliminado`);
-    };
+    const navigate = useNavigate();
 
     const handleRowClick = (id: string) => {
-        console.log(`Paciente con id ${id} eliminado`);
+        navigate(`/patient/${id}`)
     }
-
-    console.log(patients)
 
     return (
         <div className="container mx-auto py-10">
