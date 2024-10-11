@@ -9,7 +9,7 @@ import { useAuth } from "../../hooks/auth/useAuth";
 
 const sidebarItems = [
   { name: "Home", href: "/dashboard", icon: Home },
-  { name: "Beneficiaries", href: "/register", icon: Users },
+  { name: "Beneficiaries", href: "/beneficiary", icon: Users },
   { name: "Travel", href: "/settings", icon: Settings },
 ];
 
