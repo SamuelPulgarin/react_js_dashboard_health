@@ -212,7 +212,11 @@ export const RegistrationForm = () => {
                             {/* Additional Info */}
                             <div>
                                 <Label htmlFor="additionalInfo">Additional Info</Label>
-                                <Textarea id="additionalInfo" placeholder="Enter additional information" />
+                                <Textarea 
+                                id="additionalInfo" 
+                                placeholder="Enter additional information"
+                                {...register("aditional_info")} 
+                                />
                             </div>
 
                             {/* Social Security */}

@@ -19,6 +19,7 @@ export const useFetchPatients = () => {
 
     return {
         patients,
+        setPatients,
         loading
     }
 }

@@ -31,3 +31,14 @@ export const fetchPatientsWithRelations = async () => {
         return [];
     }
 };
+
+
+export const deletePatient = async (patientId: string) => {
+    try {
+        const patientResponse = await databases.deleteDocument(`66f8843900293602ad8f`, `66f89ac7002b428ca133`, patientId);
+        return patientResponse;
+    } catch (error) {
+        console.error("Error al eliminar paciente:", error);
+        return [];
+    }
+};

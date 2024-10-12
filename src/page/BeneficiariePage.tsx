@@ -1,4 +1,3 @@
-import React from 'react'
 import { BeneficiariesTable } from '../components/beneficiaries/BeneficiariesTable'
 import { SidebarMenu } from '../components/common/SidebarMenu'
 

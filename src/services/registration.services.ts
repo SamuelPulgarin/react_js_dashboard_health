@@ -2,7 +2,6 @@ import { FormValues } from "../interfaces/registration.interfaces";
 import { databases, ID } from "../lib/appwrite/config";
 import { toast } from 'react-hot-toast';
 
-// Función para crear un nuevo paciente
 export const createPatient = async (data: FormValues, navigate: Function) => {
 
     //const navigate = useNavigate();
@@ -18,6 +17,7 @@ export const createPatient = async (data: FormValues, navigate: Function) => {
             email: data.email,
             phone: data.phone,
             linkage_date: data.linkage_date,
+            aditional_info: data.aditional_info,
             hiv_test: data.hiv_test,
             social_security: data.social_security,
             test_result: data.test_result,

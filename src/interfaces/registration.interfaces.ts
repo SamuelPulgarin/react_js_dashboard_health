@@ -29,6 +29,7 @@ export interface FormValues {
     full_address: string;
     hiv_test: string;
     social_security: string;
+    aditional_info: string;
     test_result: string;
     best_contact_hour: string;
     healthAmbassador: string;
