@@ -30,6 +30,10 @@ export const useBeneficiarieTable = () => {
         navigate(`/patient/${id}`);
     };
 
+    const handleEditClick = (id: string) => {
+        navigate(`/update-patient/${id}`)
+    }
+
     return {
         filteredPatients,
         searchTerm,
@@ -43,6 +47,7 @@ export const useBeneficiarieTable = () => {
         totalPages,
         paginate,
         handleRowClick,
+        handleEditClick,
         loading,
     };
 }

@@ -130,17 +130,17 @@ export const useValidationForm = () => {
             value: true,
             message: "Social security number is required",
         },
+        pattern: {
+            value: /^\d{3}-\d{2}-\d{4}$/,
+            message: "The social security number must follow the format xxx-xx-xxxx",
+        },
         validate: {
-            pattern: {
-                value: /^\d{3}-\d{2}-\d{4}$/,
-                message: "The social security number must follow the following format xxx-xx-xxxx",
-            },
-            onlyNumbers: {
-                value: (value: string) => /^[0-9-]*$/.test(value),
-                message: "Only numbers and hyphens are allowed",
+            onlyNumbers: (value: string) => {
+                return /^[0-9-]*$/.test(value) || "Only numbers and hyphens are allowed";
             },
         },
     };
+
 
     const TEST_RESULT = {
         required: {
