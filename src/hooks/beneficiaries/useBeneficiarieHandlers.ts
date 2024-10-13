@@ -1,10 +1,10 @@
 import toast from "react-hot-toast";
-import { deletePatient, fetchPatientsWithRelations } from "../../services/patient.services";
+import { deletePatient } from "../../services/patient.services";
 import { useConfirmDialog } from "../common/useConfirmDialog";
-import { useFetchPatients } from "../patients/useFetchPatients";
+import { usePatientStore } from "../../store/patient.store";
 
 export const useBeneficiarieHandlers = () => {
-    const { setPatients } = useFetchPatients();
+    const { deletePatientById } = usePatientStore();
     const { isModalOpen, openModal, closeModal, handleConfirm } = useConfirmDialog();
 
     const handleDelete = (id: string) => {
@@ -18,8 +18,7 @@ export const useBeneficiarieHandlers = () => {
 
                 toast.success('Successful patient removal');
 
-                const updatedPatients = await fetchPatientsWithRelations();
-                setPatients(updatedPatients);
+                deletePatientById(id);
             } catch (error) {
                 toast.error('An unexpected error occurred');
             }
@@ -33,4 +32,4 @@ export const useBeneficiarieHandlers = () => {
         closeModal,
         handleConfirm,
     };
-}
+};

@@ -16,7 +16,7 @@ export const RegistrationForm = () => {
 
     const { handleSubmit, formState: { errors }, register, control, setValue } = useForm<FormValues>();
     const { fields: children, append: addChild, remove: removeChild } = useFieldArray({ control, name: "children" });
-    const { LINKAGE_DATE, NAME, LAST_NAME, EMAIL, PHONE, AGE, DOB, FULL_ADDRESS, HIV_TEST_DATE, SOCIAL_SECURITY, BEST_CONTACT_HOUR } = useValidationForm();
+    const { HEALT_AMBASSADORS, LINKAGE_DATE, NAME, LAST_NAME, EMAIL, PHONE, AGE, SEX, DOB, FULL_ADDRESS, HIV_TEST_DATE, SOCIAL_SECURITY, TEST_RESULT, BEST_CONTACT_HOUR } = useValidationForm();
     const { healthAmbassadors } = useHealthAmbassador();
     const { loading, registerPatient } = useRegistrationForm();
 
@@ -39,7 +39,10 @@ export const RegistrationForm = () => {
                             {/* Health Ambassador */}
                             <div>
                                 <Label htmlFor="healthAmbassador">Health Ambassador</Label>
-                                <Select onValueChange={(value: string) => setValue('healthAmbassador', value)}>
+                                <Select
+                                    onValueChange={(value: string) => setValue('healthAmbassador', value)}
+                                    {...register("healthAmbassador", HEALT_AMBASSADORS)}
+                                >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Select a health ambassador" />
                                     </SelectTrigger>
@@ -109,7 +112,10 @@ export const RegistrationForm = () => {
                                 </div>
                                 <div>
                                     <Label htmlFor="sex">Sex</Label>
-                                    <Select onValueChange={(value: string) => setValue('sex', value.toLowerCase())}>
+                                    <Select 
+                                    onValueChange={(value: string) => setValue('sex', value.toLowerCase())}
+                                    {...register("sex", SEX)}
+                                    >
                                         <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Select sex" />
                                         </SelectTrigger>
@@ -178,6 +184,7 @@ export const RegistrationForm = () => {
                                         <Select
                                             onValueChange={(value: string) => setValue(`children.${index}.sex`, value.toLowerCase())}
                                             defaultValue={child.sex}
+                                            {...register("sex", SEX)}
                                         >
                                             <SelectTrigger className="w-full">
                                                 <SelectValue placeholder="Select sex" />
@@ -212,10 +219,10 @@ export const RegistrationForm = () => {
                             {/* Additional Info */}
                             <div>
                                 <Label htmlFor="additionalInfo">Additional Info</Label>
-                                <Textarea 
-                                id="additionalInfo" 
-                                placeholder="Enter additional information"
-                                {...register("aditional_info")} 
+                                <Textarea
+                                    id="additionalInfo"
+                                    placeholder="Enter additional information"
+                                    {...register("aditional_info")}
                                 />
                             </div>
 
@@ -233,7 +240,10 @@ export const RegistrationForm = () => {
                             {/* Test Result */}
                             <div>
                                 <Label htmlFor="testResult">Test Result</Label>
-                                <Select onValueChange={(value: string) => setValue('test_result', value.toLowerCase())}>
+                                <Select 
+                                onValueChange={(value: string) => setValue('test_result', value.toLowerCase())}
+                                {...register("test_result", TEST_RESULT)}
+                                >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Select test result" />
                                     </SelectTrigger>

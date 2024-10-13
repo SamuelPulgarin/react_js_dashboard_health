@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Patient } from '../../interfaces/patient.interfaces';
 import { fetchPatientsWithRelations } from "../../services/patient.services";
+import { usePatientStore } from "../../store/patient.store";
 
 export const useFetchPatients = () => {
-    const [patients, setPatients] = useState<Patient[]>([]);
+    const { setPatients, patients } = usePatientStore();
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -15,11 +15,10 @@ export const useFetchPatients = () => {
         };
 
         getPatients();
-    }, []);
+    }, [setPatients]);
 
     return {
         patients,
-        setPatients,
         loading
-    }
+    };
 }

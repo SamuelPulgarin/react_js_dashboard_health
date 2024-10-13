@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useFetchPatients } from "../patients/useFetchPatients";
 import { filterPatients, paginateItems } from "../../utils/beneficiariaries.tils";
+import { usePatientStore } from "../../store/patient.store";
+import { useFetchPatients } from "../patients/useFetchPatients";
 
 export const useBeneficiarieTable = () => {
-    const { patients, loading } = useFetchPatients();
+    const { loading } =  useFetchPatients();
+    const { patients } = usePatientStore()
     const [filteredPatients, setFilteredPatients] = useState(patients);
     const [searchTerm, setSearchTerm] = useState("");
     const [roleFilter, setRoleFilter] = useState("All");
