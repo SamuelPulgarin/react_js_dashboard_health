@@ -27,7 +27,7 @@ export const PatientsTable = ({ patients }: Props) => {
                         <TableHead>Test Result</TableHead>
                         <TableHead>Age</TableHead>
                         <TableHead>Health Ambassador</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
+ {/*                        <TableHead className="text-right">Actions</TableHead> */}
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -43,7 +43,7 @@ export const PatientsTable = ({ patients }: Props) => {
                             <TableCell>{patient.test_result}</TableCell>
                             <TableCell>{patient.age}</TableCell>
                             <TableCell>{patient.healthAmbassadors?.name}</TableCell>
-                            <TableCell className="text-right">
+                            {/* <TableCell className="text-right">
                                 <Button variant="ghost" size="icon">
                                     <Edit className="h-4 w-4" />
                                     <span className="sr-only">Edit</span>
@@ -52,7 +52,7 @@ export const PatientsTable = ({ patients }: Props) => {
                                     <Trash2 className="h-4 w-4" />
                                     <span className="sr-only">Delete</span>
                                 </Button>
-                            </TableCell>
+                            </TableCell> */}
                         </TableRow>
                     ))}
                 </TableBody>

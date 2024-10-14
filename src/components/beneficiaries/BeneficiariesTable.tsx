@@ -32,7 +32,8 @@ import { Link } from "react-router-dom";
 import ConfirmationModal from "../common/ConfirmDialog";
 import { useBeneficiarieHandlers } from "../../hooks/beneficiaries/useBeneficiarieHandlers";
 import { useBeneficiarieTable } from "../../hooks/beneficiaries/useBeneficiarieTable";
-import { exportToExcel } from "../../utils/beneficiariaries.tils";
+import { clearFilters, exportToExcel } from "../../utils/beneficiariaries.tils";
+import { FiltersDropdown } from './FiltersDropdown';
 
 const itemsPerPageOptions = [10, 20, 30, 40, 50];
 
@@ -41,8 +42,18 @@ export const BeneficiariesTable = () => {
     filteredPatients,
     searchTerm,
     setSearchTerm,
-    roleFilter,
-    setRoleFilter,
+    testResultFilter,
+    setTestResultFilter,
+    genderFilter,
+    setGenderFilter,
+    ageRange,
+    setAgeRange,
+    hasChildrenFilter,
+    setHasChildrenFilter,
+    startDate,
+    setStartDate,
+    endDate,
+    setEndDate,
     currentPage,
     itemsPerPage,
     setItemsPerPage,
@@ -79,6 +90,31 @@ export const BeneficiariesTable = () => {
 
             {/* Filters */}
             <div className="flex justify-between items-center space-x-4">
+              <FiltersDropdown
+                testResultFilter={testResultFilter}
+                setTestResultFilter={setTestResultFilter}
+                genderFilter={genderFilter}
+                setGenderFilter={setGenderFilter}
+                ageRange={ageRange}
+                setAgeRange={setAgeRange}
+                hasChildrenFilter={hasChildrenFilter}
+                setHasChildrenFilter={setHasChildrenFilter}
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
+                clearFilters={() => clearFilters({
+                  setSearchTerm,
+                  setTestResultFilter,
+                  setGenderFilter,
+                  setAgeRange,
+                  setHasChildrenFilter,
+                  setStartDate,
+                  setEndDate,
+                })}
+              />
+
+              {/* Search Terms */}
               <div className="relative flex-1">
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -88,17 +124,6 @@ export const BeneficiariesTable = () => {
                   className="pl-8"
                 />
               </div>
-              <Select value={roleFilter} onValueChange={setRoleFilter}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Filter by role" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="All">All roles</SelectItem>
-                  <SelectItem value="Admin">Admin</SelectItem>
-                  <SelectItem value="User">User</SelectItem>
-                  <SelectItem value="Editor">Editor</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
 
             {/* Table */}

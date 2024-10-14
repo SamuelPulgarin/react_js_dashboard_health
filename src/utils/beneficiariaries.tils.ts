@@ -1,18 +1,48 @@
-import { Patient } from '../interfaces/patient.interfaces';
 import * as XLSX from "xlsx";
+import { Patient } from '../interfaces/patient.interfaces';
 import { formatDate } from "./form.utils";
 
 export const filterPatients = (
   patients: Patient[],
   searchTerm: string,
-  roleFilter: string
+  testResultFilter: string,
+  genderFilter: string,
+  ageRange: { min: number; max: number } | null,
+  hasChildrenFilter: boolean | null,
+  startDate: Date | null,
+  endDate: Date | null
 ): Patient[] => {
   return patients.filter((patient) => {
     const matchesSearchTerm =
       patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRoleFilter = roleFilter === "All" || patient.role === roleFilter;
-    return matchesSearchTerm && matchesRoleFilter;
+      patient.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      patient.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      patient.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      patient.test_result.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesTestResultFilter =
+      testResultFilter.toLowerCase() === "all" || patient.test_result === testResultFilter.toLowerCase();
+
+    const matchesGenderFilter = genderFilter.toLowerCase() === "all" || patient.sex === genderFilter.toLowerCase();
+
+    const matchesAgeFilter =
+      !ageRange || (patient.age >= ageRange.min && patient.age <= ageRange.max);
+
+    const matchesHasChildrenFilter =
+      hasChildrenFilter === null || (hasChildrenFilter ? patient.children.length > 0 : patient.children.length === 0);
+
+      const patientDate = new Date(patient.linkage_date);
+      const matchesDate =
+        (!startDate || patientDate >= startDate) && (!endDate || patientDate <= endDate);
+
+    return (
+      matchesSearchTerm &&
+      matchesTestResultFilter &&
+      matchesGenderFilter &&
+      matchesAgeFilter &&
+      matchesHasChildrenFilter &&
+      matchesDate
+    );
   });
 };
 
@@ -71,4 +101,32 @@ export const exportToExcel = (filteredPatients: Patient[]) => {
 
   // Export to Excel file
   XLSX.writeFile(wb, "beneficiaries.xlsx");
+};
+
+
+interface ClearFiltersProps {
+  setSearchTerm: (value: string) => void;
+  setTestResultFilter: (value: string) => void;
+  setGenderFilter: (value: string) => void;
+  setAgeRange: (range: { min: number, max: number }) => void;
+  setHasChildrenFilter: (value: boolean | null) => void;
+  setStartDate: (value: Date | null) => void;
+  setEndDate: (value: Date | null) => void;
+}
+export const clearFilters = ({
+  setSearchTerm,
+  setTestResultFilter,
+  setGenderFilter,
+  setAgeRange,
+  setHasChildrenFilter,
+  setStartDate,
+  setEndDate,
+}: ClearFiltersProps) => {
+  setSearchTerm("");
+  setTestResultFilter("All");
+  setGenderFilter("All");
+  setAgeRange({ min: 0, max: 80 });
+  setHasChildrenFilter(null);
+  setStartDate(null);
+  setEndDate(null);
 };
