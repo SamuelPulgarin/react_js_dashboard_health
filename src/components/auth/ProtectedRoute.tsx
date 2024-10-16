@@ -11,6 +11,7 @@ export const ProtectedRoute = () => {
     const userSession = localStorage.getItem('user');
 
     if (userSession) {
+      console.log(JSON.parse(userSession));
       setAuthenticated(true);
     } else {
       setAuthenticated(false);

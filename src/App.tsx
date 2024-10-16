@@ -8,6 +8,7 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { BeneficiariePage } from './page/BeneficiariePage';
 import { EditPatientPage } from './page/EditPatientPage';
 import { NotFound404 } from './components/common/NotFound404';
+import { PublicRoute } from './components/auth/PublicRoute';
 
 function App() {
   return (
@@ -15,9 +16,13 @@ function App() {
       <Router>
         <Toaster />
         <Routes>
-          <Route path='/' element={<LogInPage />} />
 
-          {/* Rutas protegidas */}
+          {/* Public Route */}
+          <Route element={<PublicRoute />}>
+            <Route path="/" element={<LogInPage />} />
+          </Route>
+
+          {/* Protected Route */}
           <Route element={<ProtectedRoute />}>
             <Route path='/dashboard' element={<HomePage />} />
             <Route path='/beneficiary' element={<BeneficiariePage />} />

@@ -64,7 +64,7 @@ export const LoginForm = () => {
             </CardContent>
             <CardFooter>
               <Button type="submit" className="w-full">
-                Iniciar Sesión
+                Login
               </Button>
             </CardFooter>
           </form>

@@ -27,12 +27,30 @@ export const useAuth = () => {
   }, [checkSession]);
 
   const handleSubmit = async () => {
-    await login(email, password);
-    toast.success(`¡Success log in!`);
-    navigate('/dashboard');
+
+    try {
+      await login(email, password);
+
+      const currentUser = useAuthStore.getState().user;
+
+      if(currentUser) {
+        toast.success('¡Logged in successfully!');
+        navigate('/dashboard');
+      } else if(error){
+        toast.error(error);
+      }
+    } catch (err) {
+      toast.error('Failed to login');
+    }
+
+    if (user) {
+      console.log(user)
+      toast.success(`¡Success log in!`);
+     
+    }
   };
 
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     await logout();
     toast.success(`successful logout`);
     navigate('/');

@@ -19,8 +19,10 @@ export const useAuthStore = create<AuthState>((set) => ({
       const user = await authService.login(email, password);
       set({ user });
       localStorage.setItem('user', JSON.stringify(user));
+      return user;
     } catch (err: any) {
       set({ error: err.message });
+      return null;
     } finally {
       set({ loading: false });
     }
