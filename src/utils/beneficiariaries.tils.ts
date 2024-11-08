@@ -53,8 +53,17 @@ export const paginateItems = (
 ): Patient[] => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  const totalItems = items.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  if (currentPage > totalPages) {
+    return [];
+  }
+
   return items.slice(indexOfFirstItem, indexOfLastItem);
 };
+
 
 
 export const exportToExcel = (filteredPatients: Patient[]) => {

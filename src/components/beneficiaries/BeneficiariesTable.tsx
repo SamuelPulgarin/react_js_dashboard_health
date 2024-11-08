@@ -67,6 +67,9 @@ export const BeneficiariesTable = () => {
 
   const { handleDelete, isModalOpen, closeModal, handleConfirm } = useBeneficiarieHandlers();
 
+  console.log(filteredPatients)
+  console.log(currentItems)
+
   return (
     <div className="container mx-auto p-6 space-y-4">
       {
@@ -140,7 +143,7 @@ export const BeneficiariesTable = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {!loading && currentItems.length > 0 ? (
+                {!loading && Array.isArray(currentItems) && currentItems.length > 0 ? (
                   currentItems.map((patient) => (
                     <TableRow
                       key={patient.$id}
@@ -202,43 +205,22 @@ export const BeneficiariesTable = () => {
               </Select>
 
               <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => paginate(1)}
-                  disabled={currentPage === 1}
-                >
+                <Button variant="outline" size="icon" onClick={() => paginate(1)} disabled={currentPage === 1}>
                   <ChevronsLeft className="h-4 w-4" />
                 </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => paginate(currentPage - 1)}
-                  disabled={currentPage === 1}
-                >
+                <Button variant="outline" size="icon" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
-                <span>
-                  Page {currentPage} of {totalPages}
-                </span>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => paginate(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                >
+                <span>Page {currentPage} of {totalPages}</span>
+                <Button variant="outline" size="icon" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>
                   <ChevronRight className="h-4 w-4" />
                 </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => paginate(totalPages)}
-                  disabled={currentPage === totalPages}
-                >
+                <Button variant="outline" size="icon" onClick={() => paginate(totalPages)} disabled={currentPage === totalPages}>
                   <ChevronsRight className="h-4 w-4" />
                 </Button>
               </div>
             </div>
+
 
             {/* Confirmation Modal */}
             <ConfirmationModal
