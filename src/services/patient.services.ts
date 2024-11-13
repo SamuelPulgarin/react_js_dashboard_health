@@ -79,3 +79,41 @@ export const deletePatient = async (patientId: string) => {
         return [];
     }
 };
+
+export const fetchPatientsWithFilters = async (filters: {
+    testResult?: string;
+    gender?: string;
+    minAge?: number;
+    maxAge?: number;
+    hasChildren?: boolean;
+  }): Promise<Patient[]> => {
+    const queries = [];
+  
+    // Filtro por resultado de prueba
+    if (filters.testResult) {
+      queries.push(Query.equal('test_result', filters.testResult));
+    }
+  
+    // Filtro por género
+    if (filters.gender) {
+      queries.push(Query.equal('gender', filters.gender));
+    }
+  
+    // Filtro por rango de edad
+    if (filters.minAge !== undefined && filters.maxAge !== undefined) {
+      queries.push(Query.between('age', filters.minAge, filters.maxAge));
+    } else if (filters.minAge !== undefined) {
+      queries.push(Query.greaterThanEqual('age', filters.minAge));
+    } else if (filters.maxAge !== undefined) {
+      queries.push(Query.lessThanEqual('age', filters.maxAge));
+    }
+  
+    // Filtro por hijos
+    if (filters.hasChildren !== undefined) {
+      queries.push(Query.equal('has_children', filters.hasChildren));
+    }
+  
+    const response = await databases.listDocuments('databaseId', 'collectionId', queries);
+  
+    return response.documents as Patient[];
+  };

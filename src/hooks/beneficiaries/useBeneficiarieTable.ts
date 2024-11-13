@@ -54,13 +54,33 @@ export const useBeneficiarieTable = () => {
     endDate,
   ]);
 
-  const totalPages = useMemo(() => {
-    const totalItems = hasActiveFilters ? filteredPatients.length : totalPatients;
-    return Math.ceil(totalItems / itemsPerPage);
-  }, [filteredPatients.length, totalPatients, itemsPerPage, hasActiveFilters]);
+// Calcular el total de páginas en base al número de pacientes filtrados si hay filtros activos
+const totalPages = useMemo(() => {
+  const totalItems = hasActiveFilters ? filteredPatients.length : totalPatients;
+  return Math.ceil(totalItems / itemsPerPage);
+}, [filteredPatients.length, totalPatients, itemsPerPage, hasActiveFilters]);
+
+// Paginación de los pacientes en función de si hay filtros activos o no
+const currentItems = useMemo(() => {
+  const items = hasActiveFilters ? filteredPatients : patients;
+  return paginateItems(items, currentPage, itemsPerPage);
+}, [filteredPatients, patients, currentPage, itemsPerPage, hasActiveFilters]);
+
+  // filteredPatients.length 
+
+  // console.log(`Total patients: ${totalPatients}`)
+  // console.log(`items por page: ${itemsPerPage}`)
+  // console.log(`total Pages: ${totalPages}`);
+  // console.log(`patients: `, patients)
+  // console.log(`filtered patients length: ${filteredPatients.length}`);
+  // console.log(`Active filter?: ${hasActiveFilters}`)
+
+  //const totalPages = Math.ceil(totalPatients / itemsPerPage);
+
+  //const currentItems = paginateItems(hasActiveFilters ? patients : filteredPatients, currentPage, itemsPerPage);
 
   // Paginación de `filteredPatients` o `patients`
-  const currentItems = paginateItems(hasActiveFilters ? filteredPatients : patients, currentPage, itemsPerPage);
+  //const currentItems = paginateItems(filteredPatients, currentPage, itemsPerPage);
 
   const paginate = (pageNumber: number) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {

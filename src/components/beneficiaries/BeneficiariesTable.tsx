@@ -67,8 +67,8 @@ export const BeneficiariesTable = () => {
 
   const { handleDelete, isModalOpen, closeModal, handleConfirm } = useBeneficiarieHandlers();
 
-  console.log(filteredPatients)
-  console.log(currentItems)
+  // console.log(filteredPatients)
+  // console.log(currentItems)
 
   return (
     <div className="container mx-auto p-6 space-y-4">
@@ -143,8 +143,8 @@ export const BeneficiariesTable = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {!loading && Array.isArray(currentItems) && currentItems.length > 0 ? (
-                  currentItems.map((patient) => (
+                {!loading && Array.isArray(filteredPatients) && filteredPatients.length > 0 ? (
+                  filteredPatients.map((patient) => (
                     <TableRow
                       key={patient.$id}
                       onClick={() => handleRowClick(patient.$id)}

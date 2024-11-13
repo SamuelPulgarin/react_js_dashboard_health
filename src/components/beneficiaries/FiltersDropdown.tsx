@@ -1,28 +1,30 @@
-import * as React from "react"
-import { CalendarIcon, Filter, X } from "lucide-react"
-import { format } from "date-fns"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import * as React from "react";
+import { CalendarIcon, Filter, X } from "lucide-react";
+import { format } from "date-fns";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
+import { useFilteredPatients } from "../../hooks/patients/useFilteredPatients";
+
 
 interface Props {
-    testResultFilter: string;
-    setTestResultFilter: (value: string) => void;
-    genderFilter: string;
-    setGenderFilter: (value: string) => void;
-    ageRange: { min: string; max: string };
-    setAgeRange: (range: { min: string; max: string }) => void;
-    hasChildrenFilter: string;
-    setHasChildrenFilter: (value: string) => void;
+    testResult: string;
+    setTestResult: (value: string) => void;
+    gender: string;
+    setGender: (value: string) => void;
+    ageRange: { min: number; max: number };
+    setAgeRange: (range: { min: number; max: number }) => void;
+    hasChildren: boolean;
+    setHasChildren: (value: boolean) => void;
     startDate: Date | undefined;
     setStartDate: (date: Date | undefined) => void;
     endDate: Date | undefined;
@@ -31,20 +33,39 @@ interface Props {
 }
 
 export const FiltersDropdown: React.FC<Props> = ({
-    testResultFilter,
-    setTestResultFilter,
-    genderFilter,
-    setGenderFilter,
+    testResult,
+    setTestResult,
+    gender,
+    setGender,
     ageRange,
     setAgeRange,
-    hasChildrenFilter,
-    setHasChildrenFilter,
+    hasChildren,
+    setHasChildren,
     startDate,
     setStartDate,
     endDate,
     setEndDate,
     clearFilters,
 }) => {
+
+    const filters = {
+        testResult: testResult.toLocaleLowerCase(),
+        gender: gender.toLocaleLowerCase(),
+        ageRange: ageRange,
+        hasChildren: hasChildren,
+        startDate: startDate,
+        endDate: endDate
+    }
+
+    const { filteredPatients, loading } = useFilteredPatients(filters);
+
+    console.log("testResultFilter:", testResult);
+    console.log("genderFilter:", gender);
+    console.log("ageRange:", ageRange);
+    console.log("hasChildrenFilter:", hasChildren);
+    console.log("startDate:", startDate);
+    console.log("endDate:", endDate);
+
     return (
         <Popover>
             <PopoverTrigger asChild>
@@ -61,8 +82,8 @@ export const FiltersDropdown: React.FC<Props> = ({
                     <div className="space-y-2">
                         <Label htmlFor="test-result">Test Result</Label>
                         <Select
-                            value={testResultFilter}
-                            onValueChange={setTestResultFilter}
+                            value={testResult}
+                            onValueChange={setTestResult}
                         >
                             <SelectTrigger id="test-result">
                                 <SelectValue placeholder="Select test result" />
@@ -79,8 +100,8 @@ export const FiltersDropdown: React.FC<Props> = ({
                     <div className="space-y-2">
                         <Label htmlFor="gender">Gender</Label>
                         <Select
-                            value={genderFilter}
-                            onValueChange={setGenderFilter}
+                            value={gender}
+                            onValueChange={setGender}
                         >
                             <SelectTrigger id="gender">
                                 <SelectValue placeholder="Select gender" />
@@ -102,13 +123,13 @@ export const FiltersDropdown: React.FC<Props> = ({
                                 type="number"
                                 placeholder="Min Age"
                                 value={ageRange?.min || ''}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAgeRange({ ...ageRange, min: e.target.value })}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAgeRange({ ...ageRange, min: Number(e.target.value) })}
                             />
                             <Input
                                 type="number"
                                 placeholder="Max Age"
                                 value={ageRange?.max || ''}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAgeRange({ ...ageRange, max: e.target.value })}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAgeRange({ ...ageRange, max: Number(e.target.value) })}
                             />
                         </div>
                     </div>
@@ -117,14 +138,15 @@ export const FiltersDropdown: React.FC<Props> = ({
                     <div className="space-y-2">
                         <Label htmlFor="has-children">Has Children</Label>
                         <Select
-                            value={hasChildrenFilter}
-                            onValueChange={setHasChildrenFilter}
+                            value={hasChildren ? "Yes" : "No"}
+                            onValueChange={(value) => setHasChildren(value === "Yes")}
                         >
                             <SelectTrigger id="has-children">
                                 <SelectValue placeholder="Has Children?" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="Yes">Yes</SelectItem>
+                                <SelectItem value="No">No</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
@@ -183,5 +205,5 @@ export const FiltersDropdown: React.FC<Props> = ({
                 </div>
             </PopoverContent>
         </Popover>
-    )
-}
+    );
+};
