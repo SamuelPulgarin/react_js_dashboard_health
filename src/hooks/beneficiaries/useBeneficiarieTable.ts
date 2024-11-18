@@ -1,14 +1,11 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { filterPatients, paginateItems } from "../../utils/beneficiariaries.tils";
-import { usePatientStore } from "../../store/patient.store";
+import { paginateItems } from "../../utils/beneficiariaries.tils";
 import { useFetchPatients } from "../patients/useFetchPatients";
 
 export const useBeneficiarieTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const { patients, totalPatients, loading } = useFetchPatients(currentPage, itemsPerPage);
-  const [filteredPatients, setFilteredPatients] = useState(patients);
   const [searchTerm, setSearchTerm] = useState("");
   const [testResultFilter, setTestResultFilter] = useState("All");
   const [genderFilter, setGenderFilter] = useState("All");
@@ -16,72 +13,76 @@ export const useBeneficiarieTable = () => {
   const [hasChildrenFilter, setHasChildrenFilter] = useState<boolean | null>(null);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const navigate = useNavigate();
 
   const hasActiveFilters = Boolean(
-    searchTerm || testResultFilter !== "All" || genderFilter !== "All" || ageRange || hasChildrenFilter !== null || startDate || endDate
+    searchTerm ||
+      testResultFilter !== "All" ||
+      genderFilter !== "All" ||
+      ageRange ||
+      hasChildrenFilter !== null ||
+      startDate ||
+      endDate
   );
 
-  const filters = { searchTerm, testResultFilter, genderFilter, ageRange, hasChildrenFilter, startDate, endDate };
-  const prevFilters = useRef(filters);
-  
-  useEffect(() => {
-    const results = filterPatients(
-      patients,
-      searchTerm,
-      testResultFilter,
-      genderFilter,
-      ageRange,
-      hasChildrenFilter,
-      startDate,
-      endDate
-    );
-    setFilteredPatients(results);
-  
-    // Verificar que los filtros hayan cambiado
-    if (JSON.stringify(prevFilters.current) !== JSON.stringify(filters)) {
-      setCurrentPage(1);
-      prevFilters.current = filters;
-    }
-  }, [
-    searchTerm,
-    testResultFilter,
-    genderFilter,
-    ageRange,
-    hasChildrenFilter,
+  const {
     patients,
+    totalPatients,
+    loading,
+    getPatients,
+  } = useFetchPatients({
+    currentPage,
+    itemsPerPage,
+    hasActiveFilters,
+    testResult: testResultFilter,
+    gender: genderFilter,
+    ageRange,
+    hasChildren: hasChildrenFilter,
     startDate,
     endDate,
-  ]);
+  });
 
-// Calcular el total de páginas en base al número de pacientes filtrados si hay filtros activos
-const totalPages = useMemo(() => {
-  const totalItems = hasActiveFilters ? filteredPatients.length : totalPatients;
-  return Math.ceil(totalItems / itemsPerPage);
-}, [filteredPatients.length, totalPatients, itemsPerPage, hasActiveFilters]);
+  const navigate = useNavigate();
 
-// Paginación de los pacientes en función de si hay filtros activos o no
-const currentItems = useMemo(() => {
-  const items = hasActiveFilters ? filteredPatients : patients;
-  return paginateItems(items, currentPage, itemsPerPage);
-}, [filteredPatients, patients, currentPage, itemsPerPage, hasActiveFilters]);
+  const [filteredPatients, setFilteredPatients] = useState(patients);
 
-  // filteredPatients.length 
+  // Filtrar pacientes en base al término de búsqueda.
+  useEffect(() => {
+    // if (searchTerm) {
+    //   const updatedPatients = patients.filter((patient) =>
+    //     Object.values(patient)
+    //       .join(" ")
+    //       .toLowerCase()
+    //       .includes(searchTerm.toLowerCase())
+    //   );
+    //   setFilteredPatients(updatedPatients);
+    // } else {
+      setFilteredPatients(patients);
+    // }
+  }, [patients/*, searchTerm*/]);
 
-  // console.log(`Total patients: ${totalPatients}`)
-  // console.log(`items por page: ${itemsPerPage}`)
-  // console.log(`total Pages: ${totalPages}`);
-  // console.log(`patients: `, patients)
-  // console.log(`filtered patients length: ${filteredPatients.length}`);
-  // console.log(`Active filter?: ${hasActiveFilters}`)
+  // Función para obtener pacientes, memorizada para evitar ciclos.
+  const fetchPatients = useCallback(() => {
+    getPatients();
+    setCurrentPage(1); // Reinicia la paginación cuando cambian los filtros.
+  }, [getPatients]);
 
-  //const totalPages = Math.ceil(totalPatients / itemsPerPage);
+  // Efecto para ejecutar `fetchPatients` cuando cambian los filtros o la configuración de la tabla.
+  useEffect(() => {
+    fetchPatients();
+  }, [fetchPatients]);
 
-  //const currentItems = paginateItems(hasActiveFilters ? patients : filteredPatients, currentPage, itemsPerPage);
+  // Calcular el total de páginas en base a los filtros aplicados.
+  const totalPages = Math.ceil(totalPatients / itemsPerPage);
 
-  // Paginación de `filteredPatients` o `patients`
-  //const currentItems = paginateItems(filteredPatients, currentPage, itemsPerPage);
+  console.log(patients)
+  console.log(itemsPerPage)
 
+  const currentItems = useMemo(() => {
+    return paginateItems(filteredPatients, currentPage, itemsPerPage);
+  }, [filteredPatients, currentPage, itemsPerPage]);
+  
+
+  // Manejar la paginación.
   const paginate = (pageNumber: number) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);

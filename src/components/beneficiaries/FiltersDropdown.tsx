@@ -1,4 +1,3 @@
-import * as React from "react";
 import { CalendarIcon, Filter, X } from "lucide-react";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -14,7 +13,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { useFilteredPatients } from "../../hooks/patients/useFilteredPatients";
-
+import { useEffect } from "react";
 
 interface Props {
     testResult: string;
@@ -48,23 +47,32 @@ export const FiltersDropdown: React.FC<Props> = ({
     clearFilters,
 }) => {
 
-    const filters = {
-        testResult: testResult.toLocaleLowerCase(),
-        gender: gender.toLocaleLowerCase(),
-        ageRange: ageRange,
-        hasChildren: hasChildren,
-        startDate: startDate,
-        endDate: endDate
-    }
+    // const filters = {
+    //     testResult: testResult ? testResult.toLowerCase() : '',
+    //     gender: gender ? gender.toLowerCase() : '',
+    //     ageRange: ageRange,
+    //     hasChildren: hasChildren,
+    //     startDate: startDate,
+    //     endDate: endDate
+    // }
 
-    const { filteredPatients, loading } = useFilteredPatients(filters);
+    // console.log(filters);
 
-    console.log("testResultFilter:", testResult);
-    console.log("genderFilter:", gender);
-    console.log("ageRange:", ageRange);
-    console.log("hasChildrenFilter:", hasChildren);
-    console.log("startDate:", startDate);
-    console.log("endDate:", endDate);
+    // const { fetchFilteredPatients, filteredPatients, loading } = useFilteredPatients(filters);
+
+    // useEffect(() => {
+    //     fetchFilteredPatients();
+    // }, [testResult, gender, ageRange, hasChildren, startDate, endDate])
+
+    // console.log(filteredPatients);
+    // console.log(loading);
+
+    // console.log("testResultFilter:", testResult);
+    // console.log("genderFilter:", gender);
+    // console.log("ageRange:", ageRange);
+    // console.log("hasChildrenFilter:", hasChildren);
+    // console.log("startDate:", startDate);
+    // console.log("endDate:", endDate);
 
     return (
         <Popover>

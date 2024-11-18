@@ -94,14 +94,14 @@ export const BeneficiariesTable = () => {
             {/* Filters */}
             <div className="flex justify-between items-center space-x-4">
               <FiltersDropdown
-                testResultFilter={testResultFilter}
-                setTestResultFilter={setTestResultFilter}
-                genderFilter={genderFilter}
-                setGenderFilter={setGenderFilter}
+                testResult={testResultFilter}
+                setTestResult={setTestResultFilter}
+                gender={genderFilter}
+                setGender={setGenderFilter}
                 ageRange={ageRange}
                 setAgeRange={setAgeRange}
-                hasChildrenFilter={hasChildrenFilter}
-                setHasChildrenFilter={setHasChildrenFilter}
+                hasChildren={hasChildrenFilter}
+                setHasChildren={setHasChildrenFilter}
                 startDate={startDate}
                 setStartDate={setStartDate}
                 endDate={endDate}

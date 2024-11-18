@@ -45,3 +45,12 @@ export interface Patient {
     children: Child[];
     healthAmbassadors: HealthAmbassador;
 }
+
+export interface FilterOptions {
+    testResult?: string;
+    gender?: string;
+    ageRange?: { min: number; max: number } | null;
+    hasChildren?: boolean;
+    startDate?: Date | null;
+    endDate?: Date | null;
+  }
