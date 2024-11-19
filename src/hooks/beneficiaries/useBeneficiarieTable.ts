@@ -63,7 +63,7 @@ export const useBeneficiarieTable = () => {
   // Función para obtener pacientes, memorizada para evitar ciclos.
   const fetchPatients = useCallback(() => {
     getPatients();
-    setCurrentPage(1); // Reinicia la paginación cuando cambian los filtros.
+    // if(hasActiveFilters) setCurrentPage(1);
   }, [getPatients]);
 
   // Efecto para ejecutar `fetchPatients` cuando cambian los filtros o la configuración de la tabla.
@@ -76,6 +76,8 @@ export const useBeneficiarieTable = () => {
 
   console.log(patients)
   console.log(itemsPerPage)
+
+  console.log("Pagina", currentPage)
 
   const currentItems = useMemo(() => {
     return paginateItems(filteredPatients, currentPage, itemsPerPage);
