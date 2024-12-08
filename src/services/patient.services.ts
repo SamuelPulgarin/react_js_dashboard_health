@@ -42,29 +42,30 @@ export const fetchPatientsWithRelations = async (limit = 50, offset = 0) => {
 export const fetchPatientsWithRelationsAndFilters = async (limit = 50, offset = 0, hasActiveFilters: boolean, filters: FilterOptions = {}) => {
     try {
 
+        console.log(filters)
         let queries = [];
 
         if (hasActiveFilters) {
             // Filtro por resultado de prueba
-            // if (filters.testResult) {
-            //     queries.push(Query.equal("test_result", filters.testResult));
-            // }
+            if (filters.testResult && filters.testResult != "all") {
+                queries.push(Query.equal("test_result", filters.testResult));
+            }
 
             // Filtro por género
-            if (filters.gender) {
+            if (filters.gender && filters.gender != "all") {
                 queries.push(Query.equal("sex", filters.gender));
             }
 
             // Filtro por rango de edad
-            // if (filters.ageRange) {
-            //     if (filters.ageRange.min !== undefined && filters.ageRange.max !== undefined) {
-            //         queries.push(Query.between("age", filters.ageRange.min, filters.ageRange.max));
-            //     } else if (filters.ageRange.min !== undefined) {
-            //         queries.push(Query.greaterThanEqual("age", filters.ageRange.min));
-            //     } else if (filters.ageRange.max !== undefined) {
-            //         queries.push(Query.lessThanEqual("age", filters.ageRange.max));
-            //     }
-            // }
+            if (filters.ageRange) {
+                if (filters.ageRange.min !== undefined && filters.ageRange.min !== 0 && filters.ageRange.max !== undefined && filters.ageRange.max !== 90) {
+                    queries.push(Query.between("age", filters.ageRange.min, filters.ageRange.max));
+                } else if (filters.ageRange.min !== undefined && filters.ageRange.min !== 0) {
+                    queries.push(Query.greaterThanEqual("age", filters.ageRange.min));
+                } else if (filters.ageRange.max !== undefined && filters.ageRange.max !== 90) {
+                    queries.push(Query.lessThanEqual("age", filters.ageRange.max));
+                }
+            }
 
             // Filtro por hijos
             // if (filters.hasChildren !== undefined) {

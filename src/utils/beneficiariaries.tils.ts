@@ -134,8 +134,46 @@ export const clearFilters = ({
   setSearchTerm("");
   setTestResultFilter("All");
   setGenderFilter("All");
-  setAgeRange({ min: 0, max: 80 });
+  setAgeRange({ min: 0, max: 90 });
   setHasChildrenFilter(null);
   setStartDate(null);
   setEndDate(null);
+};
+
+
+interface SetFiltersProps {
+  testResult: string;
+  setTestResult: (value: string) => void;
+  gender: string;
+  setGender: (value: string) => void;
+  ageRange: { min: number; max: number };
+  setAgeRange: (range: { min: number; max: number }) => void;
+  hasChildren: boolean;
+  setHasChildren: (value: boolean) => void;
+  startDate: Date | undefined;
+  setStartDate: (date: Date | undefined) => void;
+  endDate: Date | undefined;
+  setEndDate: (date: Date | undefined) => void;
+}
+
+export const setFilters = ({
+  testResult,
+  setTestResult,
+  gender,
+  setGender,
+  ageRange,
+  setAgeRange,
+  hasChildren,
+  setHasChildren,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
+}: SetFiltersProps) => {
+  setTestResult(testResult);
+  setGender(gender);
+  setAgeRange(ageRange);
+  setHasChildren(hasChildren);
+  setStartDate(startDate);
+  setEndDate(endDate);
 };

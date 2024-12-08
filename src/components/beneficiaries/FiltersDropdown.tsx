@@ -12,8 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { useFilteredPatients } from "../../hooks/patients/useFilteredPatients";
-import { useEffect } from "react";
+import { useFiltersDropdown } from "../../hooks/beneficiaries/useFiltersDropdown";
 
 interface Props {
     testResult: string;
@@ -29,6 +28,14 @@ interface Props {
     endDate: Date | undefined;
     setEndDate: (date: Date | undefined) => void;
     clearFilters: () => void;
+    applyFilters: (filters: {
+        testResult: string;
+        gender: string;
+        ageRange: { min: number; max: number };
+        hasChildren: boolean;
+        startDate: Date | undefined;
+        endDate: Date | undefined;
+    }) => void;
 }
 
 export const FiltersDropdown: React.FC<Props> = ({
@@ -45,34 +52,38 @@ export const FiltersDropdown: React.FC<Props> = ({
     endDate,
     setEndDate,
     clearFilters,
+    applyFilters
 }) => {
 
-    // const filters = {
-    //     testResult: testResult ? testResult.toLowerCase() : '',
-    //     gender: gender ? gender.toLowerCase() : '',
-    //     ageRange: ageRange,
-    //     hasChildren: hasChildren,
-    //     startDate: startDate,
-    //     endDate: endDate
-    // }
+    const { 
+        localTestResult,
+        setLocalTestResult,
+        localGender,
+        setLocalGender,
+        localAgeRange,
+        setLocalAgeRange,
+        localHasChildren,
+        setLocalHasChildren,
+        localStartDate,
+        setLocalStartDate,
+        localEndDate,
+        setLocalEndDate,
+     } = useFiltersDropdown({ testResult, gender, ageRange, hasChildren, startDate, endDate })
 
-    // console.log(filters);
+    const handleApplyFilters = () => {
+        applyFilters({
+            testResult: localTestResult,
+            gender: localGender,
+            ageRange: localAgeRange,
+            hasChildren: localHasChildren,
+            startDate: localStartDate,
+            endDate: localEndDate,
+        });
+    };
 
-    // const { fetchFilteredPatients, filteredPatients, loading } = useFilteredPatients(filters);
-
-    // useEffect(() => {
-    //     fetchFilteredPatients();
-    // }, [testResult, gender, ageRange, hasChildren, startDate, endDate])
-
-    // console.log(filteredPatients);
-    // console.log(loading);
-
-    // console.log("testResultFilter:", testResult);
-    // console.log("genderFilter:", gender);
-    // console.log("ageRange:", ageRange);
-    // console.log("hasChildrenFilter:", hasChildren);
-    // console.log("startDate:", startDate);
-    // console.log("endDate:", endDate);
+    const handleClearFilters = () => {
+        clearFilters();
+    };
 
     return (
         <Popover>
@@ -90,8 +101,8 @@ export const FiltersDropdown: React.FC<Props> = ({
                     <div className="space-y-2">
                         <Label htmlFor="test-result">Test Result</Label>
                         <Select
-                            value={testResult}
-                            onValueChange={setTestResult}
+                            value={localTestResult}
+                            onValueChange={setLocalTestResult}
                         >
                             <SelectTrigger id="test-result">
                                 <SelectValue placeholder="Select test result" />
@@ -108,8 +119,8 @@ export const FiltersDropdown: React.FC<Props> = ({
                     <div className="space-y-2">
                         <Label htmlFor="gender">Gender</Label>
                         <Select
-                            value={gender}
-                            onValueChange={setGender}
+                            value={localGender}
+                            onValueChange={setLocalGender}
                         >
                             <SelectTrigger id="gender">
                                 <SelectValue placeholder="Select gender" />
@@ -130,14 +141,18 @@ export const FiltersDropdown: React.FC<Props> = ({
                             <Input
                                 type="number"
                                 placeholder="Min Age"
-                                value={ageRange?.min || ''}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAgeRange({ ...ageRange, min: Number(e.target.value) })}
+                                value={localAgeRange?.min || ""}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    setLocalAgeRange({ ...localAgeRange, min: Number(e.target.value) })
+                                }
                             />
                             <Input
                                 type="number"
                                 placeholder="Max Age"
-                                value={ageRange?.max || ''}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAgeRange({ ...ageRange, max: Number(e.target.value) })}
+                                value={localAgeRange?.max || ""}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    setLocalAgeRange({ ...localAgeRange, max: Number(e.target.value) })
+                                }
                             />
                         </div>
                     </div>
@@ -146,8 +161,8 @@ export const FiltersDropdown: React.FC<Props> = ({
                     <div className="space-y-2">
                         <Label htmlFor="has-children">Has Children</Label>
                         <Select
-                            value={hasChildren ? "Yes" : "No"}
-                            onValueChange={(value) => setHasChildren(value === "Yes")}
+                            value={localHasChildren ? "Yes" : "No"}
+                            onValueChange={(value: "Yes" | "No") => setLocalHasChildren(value === "Yes")}
                         >
                             <SelectTrigger id="has-children">
                                 <SelectValue placeholder="Has Children?" />
@@ -167,18 +182,14 @@ export const FiltersDropdown: React.FC<Props> = ({
                                 <PopoverTrigger asChild>
                                     <Button variant="outline" className="w-full justify-start text-left font-normal">
                                         <CalendarIcon className="mr-2 h-4 w-4" />
-                                        {startDate ? (
-                                            format(startDate, "PPP")
-                                        ) : (
-                                            <span>Pick a date</span>
-                                        )}
+                                        {localStartDate ? format(localStartDate, "PPP") : <span>Pick a date</span>}
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0" align="start">
                                     <Calendar
                                         mode="single"
-                                        selected={startDate}
-                                        onSelect={setStartDate}
+                                        selected={localStartDate}
+                                        onSelect={setLocalStartDate}
                                         initialFocus
                                     />
                                 </PopoverContent>
@@ -187,18 +198,14 @@ export const FiltersDropdown: React.FC<Props> = ({
                                 <PopoverTrigger asChild>
                                     <Button variant="outline" className="w-full justify-start text-left font-normal">
                                         <CalendarIcon className="mr-2 h-4 w-4" />
-                                        {endDate ? (
-                                            format(endDate, "PPP")
-                                        ) : (
-                                            <span>Pick a date</span>
-                                        )}
+                                        {localEndDate ? format(localEndDate, "PPP") : <span>Pick a date</span>}
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0" align="start">
                                     <Calendar
                                         mode="single"
-                                        selected={endDate}
-                                        onSelect={setEndDate}
+                                        selected={localEndDate}
+                                        onSelect={setLocalEndDate}
                                         initialFocus
                                     />
                                 </PopoverContent>
@@ -206,10 +213,17 @@ export const FiltersDropdown: React.FC<Props> = ({
                         </div>
                     </div>
 
-                    <Button onClick={clearFilters} className="w-full">
+                    <div className="flex items-center justify-center gap-x-2">
+
+                    {/* Apply and Clear Buttons */}
+                    <Button onClick={handleApplyFilters} className="">
+                        Apply Filters
+                    </Button>
+                    <Button onClick={handleClearFilters} className="">
                         <X className="mr-2 h-4 w-4" />
                         Clear Filters
                     </Button>
+                    </div>
                 </div>
             </PopoverContent>
         </Popover>

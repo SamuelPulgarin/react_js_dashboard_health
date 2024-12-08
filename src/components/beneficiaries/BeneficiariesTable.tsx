@@ -32,7 +32,7 @@ import { Link } from "react-router-dom";
 import ConfirmationModal from "../common/ConfirmDialog";
 import { useBeneficiarieHandlers } from "../../hooks/beneficiaries/useBeneficiarieHandlers";
 import { useBeneficiarieTable } from "../../hooks/beneficiaries/useBeneficiarieTable";
-import { clearFilters, exportToExcel } from "../../utils/beneficiariaries.tils";
+import { clearFilters, exportToExcel, setFilters } from '../../utils/beneficiariaries.tils';
 import { FiltersDropdown } from './FiltersDropdown';
 
 const itemsPerPageOptions = [10, 20, 30, 40, 50];
@@ -69,6 +69,23 @@ export const BeneficiariesTable = () => {
 
   // console.log(filteredPatients)
   // console.log(currentItems)
+
+  const applyFilters = (filters: {
+    testResult: string;
+    gender: string;
+    ageRange: { min: number; max: number };
+    hasChildren: boolean;
+    startDate: Date | undefined;
+    endDate: Date | undefined;
+  }) => {
+    setTestResultFilter(filters.testResult);
+    setGenderFilter(filters.gender);
+    setAgeRange(filters.ageRange);
+    setHasChildrenFilter(filters.hasChildren);
+    setStartDate(filters.startDate);
+    setEndDate(filters.endDate);
+    console.log("Filters applied:", filters); // Para verificar
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-4">
@@ -115,6 +132,7 @@ export const BeneficiariesTable = () => {
                   setStartDate,
                   setEndDate,
                 })}
+                applyFilters={applyFilters}
               />
 
               {/* Search Terms */}
