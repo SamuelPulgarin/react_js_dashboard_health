@@ -40,17 +40,11 @@ interface Props {
 
 export const FiltersDropdown: React.FC<Props> = ({
     testResult,
-    setTestResult,
     gender,
-    setGender,
     ageRange,
-    setAgeRange,
     hasChildren,
-    setHasChildren,
     startDate,
-    setStartDate,
     endDate,
-    setEndDate,
     clearFilters,
     applyFilters
 }) => {
@@ -63,7 +57,7 @@ export const FiltersDropdown: React.FC<Props> = ({
         localAgeRange,
         setLocalAgeRange,
         localHasChildren,
-        setLocalHasChildren,
+        //setLocalHasChildren,
         localStartDate,
         setLocalStartDate,
         localEndDate,
@@ -158,7 +152,7 @@ export const FiltersDropdown: React.FC<Props> = ({
                     </div>
 
                     {/* Has Children Filter */}
-                    <div className="space-y-2">
+                    {/* <div className="space-y-2">
                         <Label htmlFor="has-children">Has Children</Label>
                         <Select
                             value={localHasChildren ? "Yes" : "No"}
@@ -172,7 +166,7 @@ export const FiltersDropdown: React.FC<Props> = ({
                                 <SelectItem value="No">No</SelectItem>
                             </SelectContent>
                         </Select>
-                    </div>
+                    </div> */}
 
                     {/* Date Range Filter */}
                     <div className="space-y-2">

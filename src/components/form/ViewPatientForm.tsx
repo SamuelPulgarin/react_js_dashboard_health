@@ -140,7 +140,7 @@ export const ViewPatientForm = () => {
             {/* Children */}
             <div>
               <Label htmlFor="children">Children (under 18)</Label>
-              {patient.children.length > 0 ? (
+              {patient.children && patient.children.length > 0 ? (
                 patient.children.map((child) => (
                   <div key={child.$id} className="grid grid-cols-3 gap-4 mt-2">
                     <Input value={child.full_name} readOnly />

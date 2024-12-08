@@ -7,8 +7,6 @@ import { useValidationForm } from "../../hooks/form/useValidationForm"
 import { FormValues } from '../../interfaces/registration.interfaces';
 import { useNavigate, useParams } from "react-router-dom"
 import { Spinner } from "../common/Spinner"
-import { formatDate } from '../../utils/form.utils';
-import { Child } from "../../interfaces/patient.interfaces"
 import { useFetchPatients } from "../../hooks/patients/useFetchPatients"
 import { prefillPatientData } from "../../utils/patient.utils"
 import { updatePatient } from "../../services/patient.services"

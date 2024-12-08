@@ -68,19 +68,19 @@ export const fetchPatientsWithRelationsAndFilters = async (limit = 50, offset = 
             }
 
             // Filtro por hijos
-            // if (filters.hasChildren !== undefined) {
+            // if (filters.hasChildren !== undefined && filters.hasChildren !== null) {
             //     queries.push(Query.equal("has_children", filters.hasChildren));
             // }
 
             // Filtro por fecha de inicio
-            // if (filters.startDate) {
-            //     queries.push(Query.greaterThanEqual("createdAt", filters.startDate.toISOString()));
-            // }
+            if (filters.startDate) {
+                queries.push(Query.greaterThanEqual("$createdAt", filters.startDate.toISOString()));
+            }
 
             // Filtro por fecha de fin
-            // if (filters.endDate) {
-            //     queries.push(Query.lessThanEqual("createdAt", filters.endDate.toISOString()));
-            // }
+            if (filters.endDate) {
+                queries.push(Query.lessThanEqual("$createdAt", filters.endDate.toISOString()));
+            }
 
             queries.push(Query.limit(limit), Query.offset(offset), Query.orderDesc("$createdAt"));
 
