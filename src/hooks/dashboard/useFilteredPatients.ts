@@ -13,8 +13,10 @@ export const useFilteredPatients = (patients: Patient[]) => {
   const [maxAge, setMaxAge] = useState<string>("65");
   const [sex, setSex] = useState<string>("all");
 
-  const filteredPatients = useMemo(() => {
+  const filteredPatients = () => {
+    if (!patients || !Array.isArray(patients)) return [];
     return patients.filter((patient) => {
+      console.log("entré")
       if (!date?.from || !date?.to) return false;
 
       const linkageDate = new Date(patient.linkage_date);
@@ -29,7 +31,7 @@ export const useFilteredPatients = (patients: Patient[]) => {
 
       return isWithinDateRange && isWithinAgeRange && isSexMatch;
     });
-  }, [patients, date, minAge, maxAge, sex]);
+  }
 
   return { filteredPatients, date, setDate, minAge, setMinAge, maxAge, setMaxAge, sex, setSex };
 };

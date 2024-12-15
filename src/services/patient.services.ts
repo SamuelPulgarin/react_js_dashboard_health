@@ -39,11 +39,17 @@ export const fetchPatientsWithRelations = async (limit = 50, offset = 0) => {
     }
 };
 
-export const fetchPatientsWithRelationsAndFilters = async (limit = 50, offset = 0, hasActiveFilters: boolean, filters: FilterOptions = {}) => {
+export const fetchPatientsWithRelationsAndFilters = async (limit = 50, offset = 0, hasActiveFilters: boolean, filters: FilterOptions = {}, searchTerm: string = "") => {
     try {
 
-        console.log(filters)
         let queries = [];
+
+        if (searchTerm.trim() !== "") {
+            queries.push(Query.search("name", searchTerm));
+            // queries.push(Query.search("last_name", searchTerm));
+            // queries.push(Query.search("email", searchTerm));
+            //queries.push(Query.search("test_result", searchTerm));
+        }
 
         if (hasActiveFilters) {
             // Filtro por resultado de prueba
@@ -83,7 +89,6 @@ export const fetchPatientsWithRelationsAndFilters = async (limit = 50, offset = 
             }
 
             queries.push(Query.limit(limit), Query.offset(offset), Query.orderDesc("$createdAt"));
-
             // Realizar consulta con filtros
             const response = await databases.listDocuments(
                 "66f8843900293602ad8f",
@@ -166,5 +171,23 @@ export const deletePatient = async (patientId: string) => {
     } catch (error) {
         console.error("Error al eliminar paciente:", error);
         return [];
+    }
+};
+
+
+export const fetchDataForChart = async () => {
+    try {
+        const response = await databases.listDocuments(
+            "66f8843900293602ad8f",
+            "66f89ac7002b428ca133",
+            [
+                Query.limit(1000),
+            ]
+        );
+
+        return response.documents;
+    } catch (error) {
+        console.error("Error fetching chart data:", error);
+        throw error;
     }
 };

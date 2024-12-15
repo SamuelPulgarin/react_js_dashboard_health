@@ -32,8 +32,9 @@ import { Link } from "react-router-dom";
 import ConfirmationModal from "../common/ConfirmDialog";
 import { useBeneficiarieHandlers } from "../../hooks/beneficiaries/useBeneficiarieHandlers";
 import { useBeneficiarieTable } from "../../hooks/beneficiaries/useBeneficiarieTable";
-import { clearFilters, exportToExcel, setFilters } from '../../utils/beneficiariaries.tils';
+import { clearFilters, exportToExcel } from '../../utils/beneficiariaries.tils';
 import { FiltersDropdown } from './FiltersDropdown';
+import { useState } from "react";
 
 const itemsPerPageOptions = [10, 20, 30, 40, 50];
 
@@ -67,8 +68,13 @@ export const BeneficiariesTable = () => {
 
   const { handleDelete, isModalOpen, closeModal, handleConfirm } = useBeneficiarieHandlers();
 
-  // console.log(filteredPatients)
-  // console.log(currentItems)
+  const [inputValue, setInputValue] = useState(searchTerm);
+  
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      setSearchTerm(inputValue); // Actualiza el estado de búsqueda solo al presionar Enter
+    }
+  };
 
   const applyFilters = (filters: {
     testResult: string;
@@ -140,8 +146,11 @@ export const BeneficiariesTable = () => {
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search beneficiaries..."
-                  value={searchTerm}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+                  value={inputValue}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setInputValue(e.target.value)
+                  }
+                  onKeyDown={handleSearchKeyDown}
                   className="pl-8"
                 />
               </div>

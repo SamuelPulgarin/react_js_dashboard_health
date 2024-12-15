@@ -39,6 +39,7 @@ export const useBeneficiarieTable = () => {
     hasChildren: hasChildrenFilter,
     startDate,
     endDate,
+    searchTerm
   });
 
   const navigate = useNavigate();
@@ -47,18 +48,18 @@ export const useBeneficiarieTable = () => {
 
   // Filtrar pacientes en base al término de búsqueda.
   useEffect(() => {
-    if (searchTerm) {
-      const updatedPatients = patients.filter((patient) =>
-        Object.values(patient)
-          .join(" ")
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase())
-      );
-      setFilteredPatients(updatedPatients);
-    } else {
+    // if (searchTerm) {
+    //   const updatedPatients = patients.filter((patient) =>
+    //     Object.values(patient)
+    //       .join(" ")
+    //       .toLowerCase()
+    //       .includes(searchTerm.toLowerCase())
+    //   );
+    //   setFilteredPatients(updatedPatients);
+    // } else {
       setFilteredPatients(patients);
-    }
-  }, [patients, searchTerm]);
+    // }
+  }, [patients/*, searchTerm*/]);
 
   // Función para obtener pacientes, memorizada para evitar ciclos.
   const fetchPatients = useCallback(() => {

@@ -12,6 +12,7 @@ interface Props {
   hasChildren?: boolean;
   startDate?: Date | undefined;
   endDate?: Date | undefined;
+  searchTerm?: string;
 }
 
 export const useFetchPatients = ({
@@ -24,6 +25,7 @@ export const useFetchPatients = ({
   hasChildren = null,
   startDate = undefined,
   endDate = undefined,
+  searchTerm
 }: Props = {}) => {
   const { setPatients, patients } = usePatientStore();
   const [loading, setLoading] = useState(false);
@@ -52,14 +54,15 @@ export const useFetchPatients = ({
       itemsPerPage,
       offset,
       hasActiveFilters,
-      filters
+      filters,
+      searchTerm
     );
     console.log(patients);
     console.log(total)
     setPatients(fetchedPatients);
     setTotalPatients(total);
     setLoading(false);
-  }, [filters, currentPage, itemsPerPage, hasActiveFilters, setPatients]);
+  }, [filters, currentPage, itemsPerPage, hasActiveFilters, setPatients, searchTerm]);
 
   // Ejecutar `getPatients` solo cuando sea necesario.
   useEffect(() => {

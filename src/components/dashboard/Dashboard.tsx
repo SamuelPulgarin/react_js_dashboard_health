@@ -46,10 +46,11 @@ export const Dashboard = ({ patients }: Props) => {
 
   const { filteredPatients, date, setDate, minAge, setMinAge, maxAge, setMaxAge, sex, setSex } = useFilteredPatients(patients);
 
-  const barChartData = getBarChartData(filteredPatients);
-  const pieChartData = getPieChartData(filteredPatients);
-  const lineChartData = getLineChartData(filteredPatients);
-  const areaChartData = useMemo(() => getAreaChartData(filteredPatients), [filteredPatients]);
+  const filteredPatientsArray = filteredPatients();
+  const barChartData = getBarChartData(filteredPatientsArray);
+  const pieChartData = getPieChartData(filteredPatientsArray);
+  const lineChartData = getLineChartData(filteredPatientsArray);
+  const areaChartData = useMemo(() => getAreaChartData(filteredPatientsArray), [filteredPatientsArray]);
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
