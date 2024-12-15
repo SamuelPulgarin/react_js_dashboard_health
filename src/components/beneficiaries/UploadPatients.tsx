@@ -8,11 +8,11 @@ import { downloadPatientsTemplate } from "@/utils/patient.utils";
 import { Spinner } from '../common/Spinner';
 
 export const UploadPatients = () => {
-    const [file, setFile] = useState(null);
+    const [file, setFile] = useState<File | null>(null);
     const { uploadPatients, loading, error } = useUploadPatients();
     const [uploadStatus, setUploadStatus] = useState("idle");
 
-    const handleFileChange = (event) => {
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files?.[0];
         if (selectedFile && selectedFile.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
             setFile(selectedFile);

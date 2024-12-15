@@ -8,10 +8,10 @@ interface Props {
   hasActiveFilters?: boolean;
   testResult?: string;
   gender?: string;
-  ageRange?: { min: number; max: number };
-  hasChildren?: boolean;
-  startDate?: Date | undefined;
-  endDate?: Date | undefined;
+  ageRange?: { min: number; max: number } | null;
+  hasChildren?: boolean | null;
+  startDate?: Date | null;
+  endDate?: Date | null;
   searchTerm?: string;
 }
 
@@ -23,8 +23,8 @@ export const useFetchPatients = ({
   gender = "",
   ageRange = null,
   hasChildren = null,
-  startDate = undefined,
-  endDate = undefined,
+  startDate = null,
+  endDate = null,
   searchTerm
 }: Props = {}) => {
   const { setPatients, patients } = usePatientStore();

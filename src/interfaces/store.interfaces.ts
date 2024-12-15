@@ -1,3 +1,5 @@
+import { Models } from "appwrite";
+
 export interface AuthState {
     email: string;
     password: string;
@@ -7,7 +9,7 @@ export interface AuthState {
     error: string;
     setEmail: (email: string) => void;
     setPassword: (password: string) => void;
-    login: (email: string, password: string) => Promise<void>;
+    login: (email: string, password: string) => Promise<Models.User<Models.Preferences> | null>;
     logout: () => Promise<void>;
     checkUserSession: () => Promise<void>;
 }

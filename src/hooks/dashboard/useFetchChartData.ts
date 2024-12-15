@@ -1,8 +1,9 @@
+import { Patient } from '@/interfaces/patient.interfaces';
 import { fetchDataForChart } from '@/services/patient.services';
 import { useEffect, useState } from 'react'
 
 export const useFetchChartData = () => {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState<Patient[] | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
   

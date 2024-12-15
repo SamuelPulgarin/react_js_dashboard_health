@@ -19,22 +19,22 @@ interface Props {
     setTestResult: (value: string) => void;
     gender: string;
     setGender: (value: string) => void;
-    ageRange: { min: number; max: number };
+    ageRange: { min: number; max: number } | null;
     setAgeRange: (range: { min: number; max: number }) => void;
-    hasChildren: boolean;
+    hasChildren: boolean | null;
     setHasChildren: (value: boolean) => void;
-    startDate: Date | undefined;
-    setStartDate: (date: Date | undefined) => void;
-    endDate: Date | undefined;
-    setEndDate: (date: Date | undefined) => void;
+    startDate: Date | null;
+    setStartDate: (date: Date | null) => void;
+    endDate: Date | null;
+    setEndDate: (date: Date | null) => void;
     clearFilters: () => void;
     applyFilters: (filters: {
         testResult: string;
         gender: string;
-        ageRange: { min: number; max: number };
-        hasChildren: boolean;
-        startDate: Date | undefined;
-        endDate: Date | undefined;
+        ageRange: { min: number; max: number } | null;
+        hasChildren: boolean | null;
+        startDate: Date | null;
+        endDate: Date | null;
     }) => void;
 }
 
@@ -137,7 +137,10 @@ export const FiltersDropdown: React.FC<Props> = ({
                                 placeholder="Min Age"
                                 value={localAgeRange?.min || ""}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setLocalAgeRange({ ...localAgeRange, min: Number(e.target.value) })
+                                    setLocalAgeRange({
+                                        ...localAgeRange,
+                                        min: e.target.value ? Number(e.target.value) : 0,
+                                    } as { min: number; max: number })
                                 }
                             />
                             <Input
@@ -145,7 +148,10 @@ export const FiltersDropdown: React.FC<Props> = ({
                                 placeholder="Max Age"
                                 value={localAgeRange?.max || ""}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setLocalAgeRange({ ...localAgeRange, max: Number(e.target.value) })
+                                    setLocalAgeRange({
+                                        ...localAgeRange,
+                                        min: e.target.value ? Number(e.target.value) : 0, // Forzar valor por defecto
+                                    } as { min: number; max: number })
                                 }
                             />
                         </div>
@@ -182,8 +188,8 @@ export const FiltersDropdown: React.FC<Props> = ({
                                 <PopoverContent className="w-auto p-0" align="start">
                                     <Calendar
                                         mode="single"
-                                        selected={localStartDate}
-                                        onSelect={setLocalStartDate}
+                                        selected={localStartDate || undefined}
+                                        onSelect={(date) => setLocalStartDate(date || null)}
                                         initialFocus
                                     />
                                 </PopoverContent>
@@ -198,8 +204,8 @@ export const FiltersDropdown: React.FC<Props> = ({
                                 <PopoverContent className="w-auto p-0" align="start">
                                     <Calendar
                                         mode="single"
-                                        selected={localEndDate}
-                                        onSelect={setLocalEndDate}
+                                        selected={localEndDate || undefined}
+                                        onSelect={(date) => setLocalEndDate(date || null)}
                                         initialFocus
                                     />
                                 </PopoverContent>

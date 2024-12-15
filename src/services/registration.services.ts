@@ -1,5 +1,4 @@
-import { Patient } from "@/interfaces/patient.interfaces";
-import { FormValues } from "../interfaces/registration.interfaces";
+import { FormValues, HealthAmbassador } from "../interfaces/registration.interfaces";
 import { databases, ID } from "../lib/appwrite/config";
 import { toast } from 'react-hot-toast';
 
@@ -49,10 +48,23 @@ export const createPatient = async (data: FormValues, navigate: Function) => {
     }
 };
 
-export const fetchHealthAmbassadors = async () => {
+export const fetchHealthAmbassadors = async (): Promise<HealthAmbassador[]> => {
     try {
         const response = await databases.listDocuments(`66f8843900293602ad8f`, '66f8a8bb000455f4fe18');
-        return response.documents;
+        const documents = response.documents;
+        return documents.map((doc: any) => {
+            // Asegúrate de mapear las propiedades correctas del documento
+            const healthAmbassador: HealthAmbassador = {
+                $id: doc.$id,
+                $collectionId: doc.$collectionId,
+                $databaseId: doc.$databaseId,
+                $createdAt: doc.$createdAt,
+                $updatedAt: doc.$updatedAt,
+                name: doc.name || "",
+                $permissions: doc.$permissions
+            };
+            return healthAmbassador;
+        });
     } catch (error) {
         console.error('Error fetching health ambassadors:', error);
         return [];

@@ -59,7 +59,6 @@ export const BeneficiariesTable = () => {
     currentPage,
     itemsPerPage,
     setItemsPerPage,
-    currentItems,
     totalPages,
     paginate,
     handleRowClick,
@@ -80,17 +79,17 @@ export const BeneficiariesTable = () => {
   const applyFilters = (filters: {
     testResult: string;
     gender: string;
-    ageRange: { min: number; max: number };
-    hasChildren: boolean;
-    startDate: Date | undefined;
-    endDate: Date | undefined;
+    ageRange: { min: number; max: number } | null;
+    hasChildren: boolean | null;
+    startDate: Date | null;
+    endDate: Date | null;
   }) => {
     setTestResultFilter(filters.testResult);
     setGenderFilter(filters.gender);
     setAgeRange(filters.ageRange);
     setHasChildrenFilter(filters.hasChildren);
-    setStartDate(filters.startDate);
-    setEndDate(filters.endDate);
+    setStartDate(filters.startDate!);
+    setEndDate(filters.endDate!);
     console.log("Filters applied:", filters); // Para verificar
   };
 

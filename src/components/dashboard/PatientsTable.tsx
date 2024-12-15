@@ -1,6 +1,4 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Edit, Trash2 } from "lucide-react";
 import { Patient } from "../../interfaces/patient.interfaces";
 import { useNavigate } from "react-router-dom";
 
@@ -43,16 +41,6 @@ export const PatientsTable = ({ patients }: Props) => {
                             <TableCell>{patient.test_result}</TableCell>
                             <TableCell>{patient.age}</TableCell>
                             <TableCell>{patient.healthAmbassadors?.name}</TableCell>
-                            {/* <TableCell className="text-right">
-                                <Button variant="ghost" size="icon">
-                                    <Edit className="h-4 w-4" />
-                                    <span className="sr-only">Edit</span>
-                                </Button>
-                                <Button variant="ghost" size="icon">
-                                    <Trash2 className="h-4 w-4" />
-                                    <span className="sr-only">Delete</span>
-                                </Button>
-                            </TableCell> */}
                         </TableRow>
                     ))}
                 </TableBody>

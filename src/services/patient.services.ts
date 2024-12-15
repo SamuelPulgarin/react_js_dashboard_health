@@ -12,7 +12,30 @@ export const fetchPatientsWithRelations = async (id: string) => {
             id
         );
 
-        const patient: Patient = patientResponse;
+        const patient: Patient = {
+            $id: patientResponse.$id,
+            $collectionId: patientResponse.$collectionId,
+            $databaseId: patientResponse.$databaseId,
+            $createdAt: patientResponse.$createdAt,
+            $updatedAt: patientResponse.$updatedAt,
+            aditional_info: patientResponse.additional_info || null,
+            age: patientResponse.age || 0,
+            best_contact_hour: patientResponse.best_contact_hour || '',
+            dob: patientResponse.dob || '',
+            email: patientResponse.email || '',
+            full_address: patientResponse.full_address || '',
+            hiv_test: patientResponse.hiv_test || '',
+            last_name: patientResponse.last_name || '',
+            linkage_date: patientResponse.linkage_date || '',
+            name: patientResponse.name || '',
+            phone: patientResponse.phone || '',
+            sex: patientResponse.sex || 'other',
+            social_security: patientResponse.social_security || '',
+            test_result: patientResponse.test_result || '',
+            zip_code: patientResponse.zip_code || null,
+            children: [],
+            healthAmbassadors: patientResponse.healthAmbassadors || null,
+        };
 
         // Obtener los hijos relacionados al paciente
         const childrenResponse = await databases.listDocuments(
@@ -20,7 +43,17 @@ export const fetchPatientsWithRelations = async (id: string) => {
             '66f8a834000b171526c3',
             [Query.equal('patients', patient.$id)]
         );
-        const children: Child[] = childrenResponse.documents;
+        const children: Child[] = childrenResponse.documents.map((childDoc) => ({
+            $id: childDoc.$id,
+            $collectionId: childDoc.$collectionId,
+            $databaseId: childDoc.$databaseId,
+            $createdAt: childDoc.$createdAt,
+            $updatedAt: childDoc.$updatedAt,
+            dob: childDoc.dob || '',
+            full_name: childDoc.full_name || '',
+            patients: childDoc.patients || '',
+            sex: childDoc.sex || 'other',
+        }));
 
         return { ...patient, children };
     } catch (error) {
@@ -63,11 +96,6 @@ export const fetchPatientsWithRelationsAndFilters = async (limit = 50, offset = 
                 }
             }
 
-            // Filtro por hijos
-            // if (filters.hasChildren !== undefined && filters.hasChildren !== null) {
-            //     queries.push(Query.equal("has_children", filters.hasChildren));
-            // }
-
             // Filtro por fecha de inicio
             if (filters.startDate) {
                 queries.push(Query.greaterThanEqual("$createdAt", filters.startDate.toISOString()));
@@ -86,8 +114,32 @@ export const fetchPatientsWithRelationsAndFilters = async (limit = 50, offset = 
                 queries
             );
 
-            return { patients: response.documents as Patient[], total: response.total };
+            const patients: Patient[] = response.documents.map((doc) => ({
+                $id: doc.$id,
+                $collectionId: doc.$collectionId,
+                $databaseId: doc.$databaseId,
+                $createdAt: doc.$createdAt,
+                $updatedAt: doc.$updatedAt,
+                aditional_info: doc.additional_info || null,
+                age: doc.age || 0,
+                best_contact_hour: doc.best_contact_hour || '',
+                dob: doc.dob || '',
+                email: doc.email || '',
+                full_address: doc.full_address || '',
+                hiv_test: doc.hiv_test || '',
+                last_name: doc.last_name || '',
+                linkage_date: doc.linkage_date || '',
+                name: doc.name || '',
+                phone: doc.phone || '',
+                sex: doc.sex || 'other',
+                social_security: doc.social_security || '',
+                test_result: doc.test_result || '',
+                zip_code: doc.zip_code || null,
+                children: [], // Inicialmente vacío hasta obtener los hijos
+                healthAmbassadors: doc.healthAmbassadors || null,
+            }));
 
+            return { patients, total: response.total };
         } else {
             const patientsResponse = await databases.listDocuments(
                 "66f8843900293602ad8f",
@@ -99,7 +151,30 @@ export const fetchPatientsWithRelationsAndFilters = async (limit = 50, offset = 
                 ]
             );
 
-            const patients: Patient[] = patientsResponse.documents;
+            const patients: Patient[] = patientsResponse.documents.map((doc) => ({
+                $id: doc.$id,
+                $collectionId: doc.$collectionId,
+                $databaseId: doc.$databaseId,
+                $createdAt: doc.$createdAt,
+                $updatedAt: doc.$updatedAt,
+                aditional_info: doc.additional_info || null,
+                age: doc.age || 0,
+                best_contact_hour: doc.best_contact_hour || '',
+                dob: doc.dob || '',
+                email: doc.email || '',
+                full_address: doc.full_address || '',
+                hiv_test: doc.hiv_test || '',
+                last_name: doc.last_name || '',
+                linkage_date: doc.linkage_date || '',
+                name: doc.name || '',
+                phone: doc.phone || '',
+                sex: doc.sex || 'other',
+                social_security: doc.social_security || '',
+                test_result: doc.test_result || '',
+                zip_code: doc.zip_code || null,
+                children: [],
+                healthAmbassadors: doc.healthAmbassadors || null,
+            }));
 
             // Procesar relaciones para cada paciente
             const patientsWithRelations = await Promise.all(
@@ -109,7 +184,17 @@ export const fetchPatientsWithRelationsAndFilters = async (limit = 50, offset = 
                         "66f8a834000b171526c3",
                         [Query.equal("patients", patient.$id)]
                     );
-                    const children: Child[] = childrenResponse.documents;
+                    const children: Child[] = childrenResponse.documents.map((childDoc) => ({
+                        $id: childDoc.$id,
+                        $collectionId: childDoc.$collectionId,
+                        $databaseId: childDoc.$databaseId,
+                        $createdAt: childDoc.$createdAt,
+                        $updatedAt: childDoc.$updatedAt,
+                        dob: childDoc.dob || '',
+                        full_name: childDoc.full_name || '',
+                        patients: childDoc.patients || '',
+                        sex: childDoc.sex || 'other',
+                    }));
 
                     return { ...patient, children };
                 })
@@ -175,7 +260,30 @@ export const fetchDataForChart = async () => {
             ]
         );
 
-        return response.documents;
+        return response.documents.map((doc: any) => ({
+            $id: doc.$id,
+            $collectionId: doc.$collectionId,
+            $databaseId: doc.$databaseId,
+            $createdAt: doc.$createdAt,
+            $updatedAt: doc.$updatedAt,
+            aditional_info: doc.additional_info || null,
+            age: doc.age || 0,
+            best_contact_hour: doc.best_contact_hour || "",
+            dob: doc.dob || "",
+            email: doc.email || "",
+            full_address: doc.full_address || "",
+            hiv_test: doc.hiv_test || "",
+            last_name: doc.last_name || "",
+            linkage_date: doc.linkage_date || "",
+            name: doc.name || "",
+            phone: doc.phone || "",
+            sex: doc.sex || "other",
+            social_security: doc.social_security || "",
+            test_result: doc.test_result || "",
+            zip_code: doc.zip_code || null,
+            children: doc.children || [],
+            healthAmbassadors: doc.healthAmbassadors || null,
+        }));
     } catch (error) {
         console.error("Error fetching chart data:", error);
         throw error;

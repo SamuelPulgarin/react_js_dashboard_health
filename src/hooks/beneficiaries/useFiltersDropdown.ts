@@ -3,10 +3,10 @@ import { useState } from 'react'
 interface Props {
     testResult: string;
     gender: string;
-    ageRange: { min: number; max: number };
-    hasChildren: boolean;
-    startDate: Date | undefined;
-    endDate: Date | undefined;
+    ageRange: { min: number; max: number } | null;
+    hasChildren: boolean | null;
+    startDate: Date | null;
+    endDate: Date | null;
 }
 
 export const useFiltersDropdown = ({ testResult, gender, ageRange, hasChildren, startDate, endDate }: Props) => {

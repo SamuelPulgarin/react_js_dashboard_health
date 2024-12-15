@@ -1,3 +1,4 @@
+import { HealthAmbassador } from "@/interfaces/registration.interfaces";
 import { fetchHealthAmbassadors, uploadPatientsToDatabase } from "@/services/registration.services";
 import { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
@@ -5,18 +6,31 @@ import * as XLSX from "xlsx";
 export const useUploadPatients = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [healthAmbassadors, setHealthAmbassadors] = useState([]);
+  const [healthAmbassadors, setHealthAmbassadors] = useState<HealthAmbassador[]>([]);
 
   useEffect(() => {
     const loadHealthAmbassadors = async () => {
       const ambassadors = await fetchHealthAmbassadors();
-      setHealthAmbassadors(ambassadors);
+
+      const mappedAmbassadors = ambassadors.map((doc) => {
+        const patient: HealthAmbassador = {
+          $id: doc.$id,
+          $collectionId: doc.$collectionId,
+          $databaseId: doc.$databaseId,
+          $createdAt: doc.$createdAt,
+          $updatedAt: doc.$updatedAt,
+          $permissions: doc.$permissions,
+          name: doc.name || "",
+        };
+        return patient;
+      });
+      setHealthAmbassadors(mappedAmbassadors);
     };
 
     loadHealthAmbassadors();
   }, []);
 
-  const uploadPatients = async (file) => {
+  const uploadPatients = async (file: any) => {
     setLoading(true);
     setError(null);
 

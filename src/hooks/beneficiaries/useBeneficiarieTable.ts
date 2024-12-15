@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { paginateItems } from "../../utils/beneficiariaries.tils";
 import { useFetchPatients } from "../patients/useFetchPatients";

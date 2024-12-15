@@ -50,7 +50,7 @@ export interface FilterOptions {
     testResult?: string;
     gender?: string;
     ageRange?: { min: number; max: number } | null;
-    hasChildren?: boolean;
+    hasChildren?: boolean | null;
     startDate?: Date | null;
     endDate?: Date | null;
   }
