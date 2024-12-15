@@ -48,31 +48,19 @@ export const useBeneficiarieTable = () => {
 
   // Filtrar pacientes en base al término de búsqueda.
   useEffect(() => {
-    // if (searchTerm) {
-    //   const updatedPatients = patients.filter((patient) =>
-    //     Object.values(patient)
-    //       .join(" ")
-    //       .toLowerCase()
-    //       .includes(searchTerm.toLowerCase())
-    //   );
-    //   setFilteredPatients(updatedPatients);
-    // } else {
       setFilteredPatients(patients);
-    // }
-  }, [patients/*, searchTerm*/]);
+  }, [patients]);
 
   // Función para obtener pacientes, memorizada para evitar ciclos.
-  const fetchPatients = useCallback(() => {
+  // const fetchPatients = useCallback(() => {
+  //   getPatients();
+  //   // if(hasActiveFilters) setCurrentPage(1);
+  // }, [getPatients]);
+
+  useEffect(() => {
     getPatients();
-    // if(hasActiveFilters) setCurrentPage(1);
   }, [getPatients]);
 
-  // Efecto para ejecutar `fetchPatients` cuando cambian los filtros o la configuración de la tabla.
-  useEffect(() => {
-    fetchPatients();
-  }, [fetchPatients]);
-
-  // Calcular el total de páginas en base a los filtros aplicados.
   const totalPages = Math.ceil(totalPatients / itemsPerPage);
 
   console.log(patients)

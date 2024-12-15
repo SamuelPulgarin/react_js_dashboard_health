@@ -9,6 +9,7 @@ import { BeneficiariePage } from './page/BeneficiariePage';
 import { EditPatientPage } from './page/EditPatientPage';
 import { NotFound404 } from './components/common/NotFound404';
 import { PublicRoute } from './components/auth/PublicRoute';
+import { UploadPatientPage } from './page/UploadPatientPage';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path='/patient/:id' element={<PatientPage />} />
             <Route path='/register' element={<RegisterPage />} />
             <Route path='/update-patient/:id' element={<EditPatientPage />} />
+            <Route path='/upload-patient' element={<UploadPatientPage />} />
           </Route>
 
           <Route path='*' element={<NotFound404 />} />

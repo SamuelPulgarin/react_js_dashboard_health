@@ -1,6 +1,8 @@
+import * as XLSX from "xlsx";
 import { UseFormSetValue } from 'react-hook-form';
 import { FormValues } from '../interfaces/registration.interfaces';
 import { Patient } from '../interfaces/patient.interfaces';
+import { uploadTemplateArray } from "@/data/uploadTemplate";
 
 export const prefillPatientData = (patient: Patient, setValue: UseFormSetValue<FormValues>) => {
   const formatDate = (dateString: string) => new Date(dateString).toISOString().split('T')[0];
@@ -18,4 +20,13 @@ export const prefillPatientData = (patient: Patient, setValue: UseFormSetValue<F
   setValue("test_result", patient.test_result);
   setValue("best_contact_hour", patient.best_contact_hour);
   setValue("sex", patient.sex);
+};
+
+export const downloadPatientsTemplate = () => {
+  
+  const worksheet = XLSX.utils.json_to_sheet(uploadTemplateArray);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "PatientsTemplate");
+
+  XLSX.writeFile(workbook, "PatientsTemplate.xlsx");
 };

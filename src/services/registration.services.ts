@@ -1,3 +1,4 @@
+import { Patient } from "@/interfaces/patient.interfaces";
 import { FormValues } from "../interfaces/registration.interfaces";
 import { databases, ID } from "../lib/appwrite/config";
 import { toast } from 'react-hot-toast';
@@ -57,3 +58,18 @@ export const fetchHealthAmbassadors = async () => {
         return [];
     }
 };
+
+export const uploadPatientsToDatabase = async (patients: any) => {
+  
+    try {
+      const uploadPromises = patients.map((patient: any) =>
+        databases.createDocument("66f8843900293602ad8f", "66f89ac7002b428ca133", ID.unique(), patient)
+      );
+  
+      await Promise.all(uploadPromises);
+      return { success: true };
+    } catch (error) {
+      console.error("Error uploading patients:", error);
+      return { success: false, error };
+    }
+  };

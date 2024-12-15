@@ -23,6 +23,7 @@ import {
   Search,
   Plus,
   Download,
+  Upload,
   Edit,
   Trash2,
 } from "lucide-react";
@@ -69,10 +70,10 @@ export const BeneficiariesTable = () => {
   const { handleDelete, isModalOpen, closeModal, handleConfirm } = useBeneficiarieHandlers();
 
   const [inputValue, setInputValue] = useState(searchTerm);
-  
+
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      setSearchTerm(inputValue); // Actualiza el estado de búsqueda solo al presionar Enter
+      setSearchTerm(inputValue);
     }
   };
 
@@ -103,14 +104,20 @@ export const BeneficiariesTable = () => {
             <div className="flex justify-between items-center">
               <h1 className="text-2xl font-bold">Beneficiaries Table</h1>
               <div className="space-x-2">
+                <Link to={'/upload-patient'}>
+                  <Button>
+                    <Upload className="mr-2 h-4 w-4" /> Upload
+                  </Button>
+                </Link>
+
+                <Button onClick={() => exportToExcel(filteredPatients)}>
+                  <Download className="mr-2 h-4 w-4" /> Export to Excel
+                </Button>
                 <Link to={'/register'}>
                   <Button>
                     <Plus className="mr-2 h-4 w-4" /> New User
                   </Button>
                 </Link>
-                <Button onClick={() => exportToExcel(filteredPatients)}>
-                  <Download className="mr-2 h-4 w-4" /> Export to Excel
-                </Button>
               </div>
             </div>
 
@@ -186,14 +193,14 @@ export const BeneficiariesTable = () => {
                       <TableCell>{patient.age}</TableCell>
                       <TableCell>{patient.healthAmbassadors?.name}</TableCell>
                       <TableCell className="text-right">
-                        <Button variant="ghost" size="icon" onClick={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        <Button variant="ghost" size="icon" onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                           e.stopPropagation();
                           handleEditClick(patient.$id)
                         }}>
                           <Edit className="h-4 w-4" />
                           <span className="sr-only">Edit</span>
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        <Button variant="ghost" size="icon" onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                           e.stopPropagation();
                           handleDelete(patient.$id);
                         }}>
