@@ -23,7 +23,6 @@ export const RegistrationForm = () => {
     const navigate = useNavigate();
 
     const onSubmit = (data: FormValues) => {
-        //console.log(data)
         registerPatient(data, navigate)
     };
 

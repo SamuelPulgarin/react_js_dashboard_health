@@ -150,7 +150,7 @@ export const FiltersDropdown: React.FC<Props> = ({
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                     setLocalAgeRange({
                                         ...localAgeRange,
-                                        min: e.target.value ? Number(e.target.value) : 0, // Forzar valor por defecto
+                                        max: e.target.value ? Number(e.target.value) : 0, // Forzar valor por defecto
                                     } as { min: number; max: number })
                                 }
                             />
@@ -177,11 +177,11 @@ export const FiltersDropdown: React.FC<Props> = ({
                     {/* Date Range Filter */}
                     <div className="space-y-2">
                         <Label>Linkage Date</Label>
-                        <div className="flex space-x-2">
+                        <div className="flex space-x-2 w-min">
                             <Popover>
                                 <PopoverTrigger asChild>
-                                    <Button variant="outline" className="w-full justify-start text-left font-normal">
-                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                    <Button variant="outline" className="w-full justify-start text-left font-normal max-w-[128px] truncate">
+                                        <CalendarIcon className={`${localEndDate ? '-mr-3 h-4 w-4' : 'mr-2 h-4 w-4'}`} />
                                         {localStartDate ? format(localStartDate, "PPP") : <span>Pick a date</span>}
                                     </Button>
                                 </PopoverTrigger>
@@ -196,8 +196,8 @@ export const FiltersDropdown: React.FC<Props> = ({
                             </Popover>
                             <Popover>
                                 <PopoverTrigger asChild>
-                                    <Button variant="outline" className="w-full justify-start text-left font-normal">
-                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                    <Button variant="outline" className="w-full justify-start text-left font-normal max-w-[128px] truncate">
+                                        <CalendarIcon className={`${localEndDate ? '-mr-3 h-4 w-4' : 'mr-2 h-4 w-4'}`} />
                                         {localEndDate ? format(localEndDate, "PPP") : <span>Pick a date</span>}
                                     </Button>
                                 </PopoverTrigger>

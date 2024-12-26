@@ -10,6 +10,7 @@ import { Spinner } from "../common/Spinner"
 import { prefillPatientData } from "../../utils/patient.utils"
 import { updatePatient } from "../../services/patient.services"
 import { useFetchPatient } from "@/hooks/patients/useFetchPatient"
+import { useEffect } from "react"
 
 export const EditPatientForm = () => {
   const { patient } = useFetchPatient();
@@ -18,18 +19,18 @@ export const EditPatientForm = () => {
 
   const navigate = useNavigate();
 
-  console.log(patient)
+  useEffect(() => {
+    if (patient) {
+      prefillPatientData(patient, setValue);
+    }
+  }, [patient, setValue]);
 
   if (!patient) return <Spinner />;
-
-  prefillPatientData(patient, setValue);
 
   const onSubmit = (data: FormValues) => {
     if (!patient) return;
     updatePatient(patient.$id, data, navigate);
   };
-
-  console.log("me renderizé")
 
   return (
     <>
@@ -177,8 +178,11 @@ export const EditPatientForm = () => {
           />
           {errors.best_contact_hour && <p className="text-red-600">{errors.best_contact_hour.message}</p>}
         </div>
+        <div className="grid gap-y-3 sm:flex sm:gap-x-4">
 
-        <Button type="submit" className="w-full">Update Patient</Button>
+          <Button type="button" className="w-full" onClick={() => navigate(-1)}>Back</Button>
+          <Button type="submit" className="w-full">Update Patient</Button>
+        </div>
       </form>
     </>
   )

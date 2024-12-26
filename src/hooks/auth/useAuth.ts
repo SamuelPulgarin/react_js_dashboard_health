@@ -44,9 +44,7 @@ export const useAuth = () => {
     }
 
     if (user) {
-      console.log(user)
       toast.success(`¡Success log in!`);
-     
     }
   };
 

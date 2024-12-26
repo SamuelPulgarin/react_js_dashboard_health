@@ -8,18 +8,22 @@ import { FormValues } from '../../interfaces/registration.interfaces';
 import { prefillPatientData } from "../../utils/patient.utils";
 import { formatDate } from "../../utils/form.utils";
 import { useFetchPatient } from "@/hooks/patients/useFetchPatient";
+import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 
 export const ViewPatientForm = () => {
   const { patient } = useFetchPatient();
   const { handleSubmit, register, setValue } = useForm<FormValues>();
   const { LINKAGE_DATE, NAME, LAST_NAME, EMAIL, PHONE, AGE, DOB, FULL_ADDRESS, HIV_TEST_DATE, SOCIAL_SECURITY, BEST_CONTACT_HOUR } = useValidationForm();
 
+  const navigate = useNavigate()
+
   if (!patient) return <Spinner />;
 
   prefillPatientData(patient, setValue)
 
   const onSubmit = (data: FormValues) => {
-    console.log(data);
+    console.log(data)
   };
 
   return (
@@ -186,6 +190,11 @@ export const ViewPatientForm = () => {
             {...register("best_contact_hour", BEST_CONTACT_HOUR)}
             readOnly
           />
+        </div>
+
+        <div className="grid gap-y-3 sm:flex sm:gap-x-4">
+          <Button type="button" className="w-full" onClick={() => navigate(-1)}>Back</Button>
+          <Button type="submit" className="w-full" onClick={() => navigate(`/update-patient/${patient.$id}`)}>Edit Patient</Button>
         </div>
       </form>
     </>

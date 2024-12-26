@@ -63,11 +63,6 @@ export const useBeneficiarieTable = () => {
 
   const totalPages = Math.ceil(totalPatients / itemsPerPage);
 
-  console.log(patients)
-  console.log(itemsPerPage)
-
-  console.log("Pagina", currentPage)
-
   const currentItems = useMemo(() => {
     return paginateItems(filteredPatients, currentPage, itemsPerPage);
   }, [filteredPatients, currentPage, itemsPerPage]);

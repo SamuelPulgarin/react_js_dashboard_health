@@ -90,7 +90,6 @@ export const BeneficiariesTable = () => {
     setHasChildrenFilter(filters.hasChildren);
     setStartDate(filters.startDate!);
     setEndDate(filters.endDate!);
-    console.log("Filters applied:", filters); // Para verificar
   };
 
   return (

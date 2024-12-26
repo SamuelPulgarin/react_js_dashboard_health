@@ -39,7 +39,6 @@ export const createPatient = async (data: FormValues, navigate: Function) => {
 
         toast.success('Patient created successfully!');
         navigate('/dashboard')
-        // console.log('Patient created successfully', patient);
         //navigate('/dashboard')
     } catch (error) {
         toast.error('Error creating patient. Please try again.');

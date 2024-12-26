@@ -48,8 +48,6 @@ export const useFetchPatients = ({
   const getPatients = useCallback(async () => {
     setLoading(true);
     const offset = (currentPage - 1) * itemsPerPage;
-    console.log(offset);
-    console.log(itemsPerPage);
     const { patients: fetchedPatients, total } = await fetchPatientsWithRelationsAndFilters(
       itemsPerPage,
       offset,
@@ -57,8 +55,6 @@ export const useFetchPatients = ({
       filters,
       searchTerm
     );
-    console.log(patients);
-    console.log(total)
     setPatients(fetchedPatients);
     setTotalPatients(total);
     setLoading(false);

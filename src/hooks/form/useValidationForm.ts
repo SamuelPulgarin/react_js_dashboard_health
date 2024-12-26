@@ -69,8 +69,8 @@ export const useValidationForm = () => {
             message: "Phone number is required",
         },
         pattern: {
-            value: /^[0-9]{10}$/,
-            message: "Phone number must be 10 digits",
+            value: /^\d{3}-\d{3}-\d{4}$/,
+            message: "Must be a valid phone xxx-xxx-xxxx",
         },
     };
 

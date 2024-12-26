@@ -3,14 +3,14 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Home, Menu, Settings, Users, LogOut } from "lucide-react";
+import { Home, Menu, Users, LogOut } from "lucide-react";
 import { useAuth } from "../../hooks/auth/useAuth";
 
 
 const sidebarItems = [
   { name: "Home", href: "/dashboard", icon: Home },
   { name: "Beneficiaries", href: "/beneficiary", icon: Users },
-  { name: "Travel", href: "/settings", icon: Settings },
+  // { name: "Travel", href: "/settings", icon: Settings },
 ];
 
 export const SidebarMenu = () => {
