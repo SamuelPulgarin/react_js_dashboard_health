@@ -1,3 +1,4 @@
+
 export interface ChartData {
     name: string;
     value: number;
@@ -16,5 +17,8 @@ export interface AreaChartData {
 export interface DateRange {
     from: Date;
     to: Date;
-  }
-  
+}
+// export interface DateRange {
+//     from?: Date;
+//     to?: Date;
+//   }

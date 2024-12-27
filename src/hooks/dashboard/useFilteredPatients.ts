@@ -30,8 +30,8 @@ export const useFilteredPatients = (patients: Patient[]) => {
     return patients.filter((patient) => {
       const linkageDate = new Date(patient.linkage_date);
       const isWithinDateRange =
-        linkageDate >= appliedFilters.date.from &&
-        linkageDate <= appliedFilters.date.to;
+      linkageDate >= (appliedFilters?.date ?? {}).from &&
+  linkageDate <= (appliedFilters?.date ?? {}).to;
 
       const isWithinAgeRange =
         patient.age >= parseInt(appliedFilters.minAge, 10) &&

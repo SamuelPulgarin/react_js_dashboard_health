@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import {
@@ -39,6 +39,7 @@ import { useFilteredPatients } from "../../hooks/dashboard/useFilteredPatients";
 import { getAreaChartData, getBarChartData, getLineChartData, getPieChartData } from "../../utils/dashboard.utils";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Label } from "../ui/label";
+import { DateRange as DayPickerDateRange } from 'react-day-picker';
 
 interface Props {
   patients: Patient[];
@@ -99,8 +100,14 @@ export const Dashboard = ({ patients }: Props) => {
                       initialFocus
                       mode="range"
                       defaultMonth={date?.from}
-                      selected={date}
-                      onSelect={setDate}
+                      selected={date as DayPickerDateRange}
+                      onSelect={(range) => {
+                        if (range) {
+                          if (range) {
+                            setDate(range as { from: Date; to: Date });
+                          }
+                        }
+                      }}
                       numberOfMonths={2}
                     />
                   </PopoverContent>
