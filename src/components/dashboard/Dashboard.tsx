@@ -157,7 +157,7 @@ export const Dashboard = ({ patients }: Props) => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 place-items-center xl:grid-cols-2 gap-8">
         {/* Bar Chart */}
         <div className="bg-white p-4 rounded-lg shadow">
           <h2 className="text-lg font-semibold mb-4">Bar Chart: Sex Distribution</h2>

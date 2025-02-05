@@ -20,10 +20,11 @@ export const PublicRoute = () => {
 
       setLoading(false);
     };
-
+    
     checkSession();
   }, [checkUserSession]);
-
+  
+  console.log(loading)
   if (loading) return <Spinner />;
 
   if (authenticated) {

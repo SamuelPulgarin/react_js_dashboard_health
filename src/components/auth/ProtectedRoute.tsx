@@ -1,30 +1,33 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { Spinner } from '../common/Spinner';
 import { useState, useEffect } from 'react';
+import { useAuthStore } from '@/store/user.store';
 
 export const ProtectedRoute = () => {
-  const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
-
+  const checkUserSession = useAuthStore((state) => state.checkUserSession);
+  
   useEffect(() => {
+    const checkSession = async () => {
+      await checkUserSession();
+      const currentUser = useAuthStore.getState().user;
+      // const userSession = localStorage.getItem('user');
 
-    const userSession = localStorage.getItem('user');
-
-    if (userSession) {
-      setAuthenticated(true);
-    } else {
-      setAuthenticated(false);
-    }
-
-    setLoading(false);
+      if (currentUser) {
+        setAuthenticated(true);
+      } else {
+        setAuthenticated(false);
+      }
+    };
+    checkSession();
   }, []);
 
-  if (loading) return <Spinner />;
+  if (useAuthStore.getState().loading) return <Spinner />;
 
   if (!authenticated) {
     return <Navigate to="/" />;
   }
 
-  return <Outlet />;
+  return <Navigate to="/dashboard" />;
 };
 
