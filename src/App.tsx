@@ -8,7 +8,7 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { BeneficiariePage } from './page/BeneficiariePage';
 import { EditPatientPage } from './page/EditPatientPage';
 import { NotFound404 } from './components/common/NotFound404';
-import { PublicRoute } from './components/auth/PublicRoute';
+// import { PublicRoute } from './components/auth/PublicRoute';
 import { UploadPatientPage } from './page/UploadPatientPage';
 
 function App() {
