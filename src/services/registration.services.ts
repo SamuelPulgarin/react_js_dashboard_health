@@ -2,6 +2,14 @@ import { FormValues, HealthAmbassador } from "../interfaces/registration.interfa
 import { databases, ID } from "../lib/appwrite/config";
 import { toast } from 'react-hot-toast';
 
+const formatDate = (dateString: string): string | null => {
+    if (!dateString) return null; // Evita errores con valores vacíos
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return null; // Si la fecha no es válida, retorna null
+    return date.toISOString().split("T")[0]; // Formato YYYY-MM-DD
+};
+
+
 export const createPatient = async (data: FormValues, navigate: Function) => {
 
     //const navigate = useNavigate();
@@ -71,16 +79,65 @@ export const fetchHealthAmbassadors = async (): Promise<HealthAmbassador[]> => {
 };
 
 export const uploadPatientsToDatabase = async (patients: any) => {
-  
+
     try {
-      const uploadPromises = patients.map((patient: any) =>
-        databases.createDocument("66f8843900293602ad8f", "66f89ac7002b428ca133", ID.unique(), patient)
-      );
-  
-      await Promise.all(uploadPromises);
-      return { success: true };
+        const patientPromises = patients.map(async (patient: any) => {
+            const newPatient = await databases.createDocument(
+                "66f8843900293602ad8f",
+                "66f89ac7002b428ca133",
+                ID.unique(),
+                {
+                    name: patient.name,
+                    last_name: patient.last_name,
+                    dob: formatDate(patient.dob),
+                    age: Number(patient.age),
+                    sex: patient.sex?.toLowerCase(),
+                    full_address: patient.full_address,
+                    email: patient.email,
+                    phone: String(patient.phone),
+                    linkage_date: patient.linkage_date,
+                    aditional_info: patient.aditional_info,
+                    hiv_test: patient.hiv_test,
+                    social_security: patient.social_security,
+                    test_result: patient.test_result?.toLowerCase(),
+                    status: patient.status,
+                    healthAmbassadors: patient.healthAmbassadors
+                }
+            );
+
+            // Si el paciente tiene hijos, guardarlos en la colección correspondiente
+            if (patient.children && patient.children.length > 0) {
+                const uniqueChildren = patient.children.filter((child: any, index: number, self: any[]) =>
+                    index === self.findIndex((t: any) => (
+                        t.full_name === child.full_name &&
+                        t.dob === child.dob &&
+                        t.social_security === child.social_security
+                    ))
+                );
+
+                const childrenPromises = uniqueChildren.map((child: any) =>
+                    databases.createDocument(
+                        "66f8843900293602ad8f",
+                        "66f8a834000b171526c3",
+                        ID.unique(),
+                        {
+                            full_name: child.full_name,
+                            dob: formatDate(child.dob),
+                            sex: child.sex?.toLowerCase(),
+                            social_security: child.social_security,
+                            patients: newPatient.$id
+                        }
+                    )
+                );
+
+                await Promise.all(childrenPromises);
+            }
+        });
+
+        await Promise.all(patientPromises);
+        return { success: true };
     } catch (error) {
-      console.error("Error uploading patients:", error);
-      return { success: false, error };
+        console.error("Error uploading patients:", error);
+        return { success: false, error };
     }
-  };
+};

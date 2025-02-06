@@ -1,5 +1,6 @@
 import { HealthAmbassador } from "@/interfaces/registration.interfaces";
 import { fetchHealthAmbassadors, uploadPatientsToDatabase } from "@/services/registration.services";
+import { formatTime, parseChildren } from "@/utils/form.utils";
 import { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 
@@ -44,17 +45,31 @@ export const useUploadPatients = () => {
       const updatedPatients = sheetData.map((patient: any) => {
         // Buscar el ID del health ambassador en el array de embajadores
         const healthAmbassador = healthAmbassadors.find(
-          (ambassador) => ambassador.name === patient.healthAmbassadors
+          (ambassador) => ambassador.name.trim().toLowerCase() === patient["HEALTH AMBASSADOR"].trim().toLowerCase()
         );
 
-        if (healthAmbassador) {
-          patient.healthAmbassadors = healthAmbassador.$id;
-        } else {
-          patient.healthAmbassadors = null;
-        }
-
-        return patient;
+        return {
+          name: patient["NAME"] || "",
+          last_name: patient["LAST NAME"] || "",
+          email: patient["EMAIL"] || "",
+          phone: patient["PHONE"] || "",
+          age: Number(patient["AGE"]) || 0,
+          dob:formatTime(patient["D.O.B"]),
+          sex: patient["SEX"] || "",
+          linkage_date: formatTime(patient["LINKAGE DATE"]),
+          full_address: patient["FULL ADDRESS"] || "",
+          hiv_test: patient["DATE OF HIV TEST"] || "",
+          social_security: patient["SOCIAL SECURITY"] || "",
+          aditional_info: patient["ADDITIONAL INFO"] || "",
+          test_result: patient["RESULT OF THE TEST"] || "",
+          status: patient["STATUS"] || "",
+          // best_contact_hour: patient["BEST CONTACT HOUR"] || "",
+          healthAmbassadors: healthAmbassador ? healthAmbassador.$id : null, // Almacenar solo el ID
+          children: parseChildren(patient["CHILDREN UNDER 18 NAME D.O.B SEX"]),
+        };
       });
+
+      console.log(updatedPatients);
 
       // Enviar los datos a la base de datos
       const response = await uploadPatientsToDatabase(updatedPatients);
