@@ -111,9 +111,9 @@ export const RegistrationForm = () => {
                                 </div>
                                 <div>
                                     <Label htmlFor="sex">Sex</Label>
-                                    <Select 
-                                    onValueChange={(value: string) => setValue('sex', value.toLowerCase())}
-                                    {...register("sex", SEX)}
+                                    <Select
+                                        onValueChange={(value: string) => setValue('sex', value.toLowerCase())}
+                                        {...register("sex", SEX)}
                                     >
                                         <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Select sex" />
@@ -194,26 +194,53 @@ export const RegistrationForm = () => {
                                                 <SelectItem value="OTHER">OTHER</SelectItem>
                                             </SelectContent>
                                         </Select>
+                                        <Input
+                                            placeholder="Social security"
+                                            {...register(`children.${index}.social_security`)}
+                                            defaultValue={child.social_security}
+                                        />
                                         <Button type="button" variant="destructive" onClick={() => removeChild(index)}>
                                             <X size={15} /> Eliminar
                                         </Button>
                                     </div>
                                 ))}
-                                <Button type="button" onClick={() => addChild({ name: "", dob: "", sex: "" })} className="mt-2">
+                                <Button type="button" onClick={() => addChild({ name: "", dob: "", sex: "", social_security: "" })} className="mt-2">
                                     Add Child
                                 </Button>
                             </div>
 
                             {/* HIV Test Date */}
-                            <div>
-                                <Label htmlFor="hivTestDate">HIV Test Date</Label>
-                                <Input
-                                    id="hivTestDate"
-                                    type="date"
-                                    {...register("hiv_test", HIV_TEST_DATE)}
-                                />
-                                {errors.hiv_test && <p className="text-red-500">{errors.hiv_test.message}</p>}
+                            <div className="grid grid-cols-3 gap-4">
+                                <div>
+                                    <Label htmlFor="hivTestDate">HIV Test Date</Label>
+                                    <Input
+                                        id="hivTestDate"
+                                        type="date"
+                                        {...register("hiv_test", HIV_TEST_DATE)}
+                                    />
+                                    {errors.hiv_test && <p className="text-red-500">{errors.hiv_test.message}</p>}
+                                </div>
+                                <div>
+                                    <Label htmlFor="insurer">Insurer</Label>
+                                    <Input
+                                        id="insurer"
+                                        placeholder="Enter Insurer"
+                                        {...register("insurer")}
+                                    />
+                                    {errors.insurer && <p className="text-red-500">{errors.insurer.message}</p>}
+                                </div>
+                                <div>
+                                    <Label htmlFor="member_id">Member id</Label>
+                                    <Input
+                                        id="member_id"
+                                        placeholder="Enter id"
+                                        {...register("member_id")}
+                                    />
+                                    {errors.member_id && <p className="text-red-500">{errors.member_id.message}</p>}
+                                </div>
                             </div>
+
+
 
                             {/* Additional Info */}
                             <div>
@@ -236,22 +263,41 @@ export const RegistrationForm = () => {
                                 {errors.social_security && <p className="text-red-500">{errors.social_security.message}</p>}
                             </div>
 
-                            {/* Test Result */}
-                            <div>
-                                <Label htmlFor="testResult">Test Result</Label>
-                                <Select 
-                                onValueChange={(value: string) => setValue('test_result', value.toLowerCase())}
-                                {...register("test_result", TEST_RESULT)}
-                                >
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Select test result" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="NEGATIVE">NEGATIVE</SelectItem>
-                                        <SelectItem value="POSITIVE">POSITIVE</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                {errors.test_result && <p className="text-red-500">{errors.test_result.message}</p>}
+                            {/* Test Result || status*/}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <Label htmlFor="testResult">Test Result</Label>
+                                    <Select
+                                        onValueChange={(value: string) => setValue('test_result', value.toLowerCase())}
+                                        {...register("test_result", TEST_RESULT)}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Select test result" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="NEGATIVE">NEGATIVE</SelectItem>
+                                            <SelectItem value="POSITIVE">POSITIVE</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    {errors.test_result && <p className="text-red-500">{errors.test_result.message}</p>}
+                                </div>
+                                <div>
+                                    <Label htmlFor="status">Status</Label>
+                                    <Select
+                                        onValueChange={(value: string) => setValue('status', value.toLowerCase())}
+                                        {...register("status", { required: true })}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Select status" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="ACTIVE">ACTIVE</SelectItem>
+                                            <SelectItem value="INACTIVE">INACTIVE</SelectItem>
+                                            <SelectItem value="REFUND">REFUND</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    {errors.status && <p className="text-red-500">{errors.status.message}</p>}
+                                </div>
                             </div>
 
                             {/* Best Contact Hour */}

@@ -33,9 +33,14 @@ export interface FormValues {
     test_result: string;
     best_contact_hour: string;
     healthAmbassador: string;
+    insurer: string;
+    member_id: string;
+    status: string
     children: {
         name: string;
         dob: string;
         sex: string;
+        social_security: string;
+
     }[];
 }

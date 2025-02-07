@@ -80,8 +80,8 @@ export const useValidationForm = () => {
             message: "Age is required",
         },
         min: {
-            value: 1,
-            message: "Minimum age is 1",
+            value: 18,
+            message: "Minimum age is 18",
         },
         max: {
             value: 120,

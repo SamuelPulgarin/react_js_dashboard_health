@@ -42,8 +42,13 @@ export const UploadPatients = () => {
                     : (
                         <div className="flex min-h-screen flex-col items-center justify-center p-24 bg-background text-foreground">
                             <div className="container mx-auto p-4 max-w-2xl">
-                                <Button onClick={handleDownloadTemplate} className="mb-4">
-                                    Download Template
+                                <Button className="mb-4">
+                                    <a
+                                        href="/Template_beneficiaries.xlsx"
+                                        download="Template_beneficiaries.xlsx"
+                                    >
+                                        Download Template
+                                    </a>
                                 </Button>
 
                                 <Card>

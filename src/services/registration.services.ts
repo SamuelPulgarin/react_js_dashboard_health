@@ -30,6 +30,9 @@ export const createPatient = async (data: FormValues, navigate: Function) => {
             social_security: data.social_security,
             test_result: data.test_result,
             best_contact_hour: data.best_contact_hour,
+            insurer: data.insurer,
+            member_id: data.member_id,
+            status: data.status,
             healthAmbassadors: data.healthAmbassador // relationship
         });
 
@@ -40,6 +43,7 @@ export const createPatient = async (data: FormValues, navigate: Function) => {
                     full_name: child.name,
                     dob: child.dob,
                     sex: child.sex,
+                    social_security: child.social_security,
                     patients: patient.$id // relationship
                 });
             }
@@ -100,6 +104,8 @@ export const uploadPatientsToDatabase = async (patients: any) => {
                     hiv_test: patient.hiv_test,
                     social_security: patient.social_security,
                     test_result: patient.test_result?.toLowerCase(),
+                    insurer: patient.insurer?.toLowerCase(),
+                    member_id: patient.member_id,
                     status: patient.status,
                     healthAmbassadors: patient.healthAmbassadors
                 }

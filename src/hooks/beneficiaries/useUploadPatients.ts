@@ -62,6 +62,8 @@ export const useUploadPatients = () => {
           social_security: patient["SOCIAL SECURITY"] || "",
           aditional_info: patient["ADDITIONAL INFO"] || "",
           test_result: patient["RESULT OF THE TEST"] || "",
+          insurer: patient["INSURER"] || "",
+          member_id: patient["MEMBER ID"] || "",
           status: patient["STATUS"] || "",
           // best_contact_hour: patient["BEST CONTACT HOUR"] || "",
           healthAmbassadors: healthAmbassador ? healthAmbassador.$id : null, // Almacenar solo el ID
