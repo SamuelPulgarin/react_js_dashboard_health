@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui
 import { Input } from "../ui/input";
 import { Alert, AlertTitle, AlertDescription } from "../ui/alert";
 import { useUploadPatients } from "@/hooks/beneficiaries/useUploadPatients";
-import { downloadPatientsTemplate } from "@/utils/patient.utils";
+// import { downloadPatientsTemplate } from "@/utils/patient.utils";
 import { Spinner } from '../common/Spinner';
 
 export const UploadPatients = () => {
@@ -30,9 +30,9 @@ export const UploadPatients = () => {
         setUploadStatus(result.success ? "success" : "error");
     };
 
-    const handleDownloadTemplate = () => {
-        downloadPatientsTemplate();
-    };
+    // const handleDownloadTemplate = () => {
+    //     downloadPatientsTemplate();
+    // };
 
     return (
         <>
