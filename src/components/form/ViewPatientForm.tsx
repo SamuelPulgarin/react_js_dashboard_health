@@ -26,6 +26,8 @@ export const ViewPatientForm = () => {
     console.log(data)
   };
 
+  console.log(patient.children)
+
   return (
     <>
       <h1 className="text-2xl font-bold text-center py-4">View Patient</h1>
@@ -138,10 +140,11 @@ export const ViewPatientForm = () => {
           <Label htmlFor="children">Children (under 18)</Label>
           {patient.children && patient.children.length > 0 ? (
             patient.children.map((child) => (
-              <div key={child.$id} className="grid grid-cols-3 gap-4 mt-2">
+              <div key={child.$id} className="grid grid-cols-4 gap-4 mt-2">
                 <Input value={child.full_name} readOnly />
                 <Input value={formatDate(child.dob)} type="date" disabled />
                 <Input value={child.sex} readOnly />
+                <Input value={child.social_security} readOnly />
               </div>
             ))
           ) : (
@@ -149,15 +152,34 @@ export const ViewPatientForm = () => {
           )}
         </div>
 
-        {/* HIV Test Date */}
-        <div>
-          <Label htmlFor="hivTestDate">HIV Test Date</Label>
-          <Input
-            id="hivTestDate"
-            type="date"
-            {...register("hiv_test", HIV_TEST_DATE)}
-            disabled
-          />
+        {/* HIV Test Date, Insurer, Member id */}
+        <div className="grid grid-cols-3 gap-4">
+          <div>
+            <Label htmlFor="hivTestDate">HIV Test Date</Label>
+            <Input
+              id="hivTestDate"
+              type="date"
+              {...register("hiv_test", HIV_TEST_DATE)}
+              disabled
+            />
+          </div>
+          <div>
+            <Label htmlFor="insurer">Insurer</Label>
+            <Input
+              id="insurer"
+              {...register("insurer")}
+              disabled
+            />
+          </div>
+          <div>
+            <Label htmlFor="member_id">Member id</Label>
+            <Input
+              id="member_id"
+              {...register("member_id")}
+              disabled
+            />
+          </div>
+
         </div>
 
         {/* Additional Info */}
@@ -176,10 +198,16 @@ export const ViewPatientForm = () => {
           />
         </div>
 
-        {/* Test Result */}
-        <div>
-          <Label htmlFor="testResult">Test Result</Label>
-          <Input value={patient.test_result} readOnly />
+        {/* Test Result, Status */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="testResult">Test Result</Label>
+            <Input value={patient.test_result} readOnly />
+          </div>
+          <div>
+            <Label htmlFor="status">Status</Label>
+            <Input value={patient.status} readOnly />
+          </div>
         </div>
 
         {/* Best Contact Hour */}

@@ -18,6 +18,7 @@ export interface Child {
     full_name: string;
     patients: Patient;
     sex: 'male' | 'female' | 'other';
+    social_security: string;
 }
 
 
@@ -42,6 +43,9 @@ export interface Patient {
     social_security: string;
     test_result: string;
     zip_code: string | null;
+    insurer: string;
+    member_id: string;
+    status: string
     children: Child[];
     healthAmbassadors: HealthAmbassador;
 }

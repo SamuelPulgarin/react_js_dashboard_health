@@ -1,3 +1,4 @@
+import { AppwriteException } from "appwrite";
 import { FormValues, HealthAmbassador } from "../interfaces/registration.interfaces";
 import { databases, ID } from "../lib/appwrite/config";
 import { toast } from 'react-hot-toast';
@@ -83,67 +84,89 @@ export const fetchHealthAmbassadors = async (): Promise<HealthAmbassador[]> => {
 };
 
 export const uploadPatientsToDatabase = async (patients: any) => {
-
     try {
         const patientPromises = patients.map(async (patient: any) => {
-            const newPatient = await databases.createDocument(
-                "66f8843900293602ad8f",
-                "66f89ac7002b428ca133",
-                ID.unique(),
-                {
-                    name: patient.name,
-                    last_name: patient.last_name,
-                    dob: formatDate(patient.dob),
-                    age: Number(patient.age),
-                    sex: patient.sex?.toLowerCase(),
-                    full_address: patient.full_address,
-                    email: patient.email,
-                    phone: String(patient.phone),
-                    linkage_date: patient.linkage_date,
-                    aditional_info: patient.aditional_info,
-                    hiv_test: patient.hiv_test,
-                    social_security: patient.social_security,
-                    test_result: patient.test_result?.toLowerCase(),
-                    insurer: patient.insurer?.toLowerCase(),
-                    member_id: patient.member_id,
-                    status: patient.status,
-                    healthAmbassadors: patient.healthAmbassadors
+            try {
+                const newPatient = await databases.createDocument(
+                    "66f8843900293602ad8f",
+                    "66f89ac7002b428ca133",
+                    ID.unique(),
+                    {
+                        name: patient.name,
+                        last_name: patient.last_name,
+                        dob: formatDate(patient.dob),
+                        age: Number(patient.age),
+                        sex: patient.sex?.toLowerCase(),
+                        full_address: patient.full_address,
+                        email: patient.email,
+                        phone: String(patient.phone),
+                        linkage_date: patient.linkage_date,
+                        aditional_info: patient.aditional_info,
+                        hiv_test: patient.hiv_test,
+                        social_security: patient.social_security,
+                        test_result: patient.test_result?.toLowerCase(),
+                        insurer: patient.insurer?.toLowerCase(),
+                        member_id: patient.member_id,
+                        status: patient.status,
+                        healthAmbassadors: patient.healthAmbassadors
+                    }
+                );
+
+                // Si el paciente tiene hijos, guardarlos en la colección correspondiente
+                if (patient.children && patient.children.length > 0) {
+                    const uniqueChildren = patient.children.filter((child: any, index: number, self: any[]) =>
+                        index === self.findIndex((t: any) => (
+                            t.full_name === child.full_name &&
+                            t.dob === child.dob &&
+                            t.social_security === child.social_security
+                        ))
+                    );
+
+                    const childrenPromises = uniqueChildren.map((child: any) =>
+                        databases.createDocument(
+                            "66f8843900293602ad8f",
+                            "66f8a834000b171526c3",
+                            ID.unique(),
+                            {
+                                full_name: child.full_name,
+                                dob: formatDate(child.dob),
+                                sex: child.sex?.toLowerCase(),
+                                social_security: child.social_security,
+                                patients: newPatient.$id
+                            }
+                        )
+                    );
+
+                    await Promise.all(childrenPromises);
                 }
-            );
 
-            // Si el paciente tiene hijos, guardarlos en la colección correspondiente
-            if (patient.children && patient.children.length > 0) {
-                const uniqueChildren = patient.children.filter((child: any, index: number, self: any[]) =>
-                    index === self.findIndex((t: any) => (
-                        t.full_name === child.full_name &&
-                        t.dob === child.dob &&
-                        t.social_security === child.social_security
-                    ))
-                );
-
-                const childrenPromises = uniqueChildren.map((child: any) =>
-                    databases.createDocument(
-                        "66f8843900293602ad8f",
-                        "66f8a834000b171526c3",
-                        ID.unique(),
-                        {
-                            full_name: child.full_name,
-                            dob: formatDate(child.dob),
-                            sex: child.sex?.toLowerCase(),
-                            social_security: child.social_security,
-                            patients: newPatient.$id
-                        }
-                    )
-                );
-
-                await Promise.all(childrenPromises);
+                return { success: true };
+            } catch (error) {
+                if (error instanceof AppwriteException && error.code === 409) {
+                    toast.error(`Patient ${patient.name} already exists`);
+                    console.log("El catch de la funcion")
+                } else {
+                    console.log("El catch de la funcion else")
+                    toast.error(`Error uploading patient ${patient.name}`);
+                }
+                return { success: false };
             }
         });
 
-        await Promise.all(patientPromises);
+        // Ejecutar todas las promesas sin detenerse en errores individuales
+        const results = await Promise.allSettled(patientPromises);
+
+        // Verificar si alguna promesa falló
+        const hasError = results.some(result => result.status === "fulfilled" && result.value.success === false);
+
+        if (hasError) {
+            return { success: false };
+        }
+
         return { success: true };
     } catch (error) {
         console.error("Error uploading patients:", error);
+        console.log("Ctahc mayor")
         return { success: false, error };
     }
 };

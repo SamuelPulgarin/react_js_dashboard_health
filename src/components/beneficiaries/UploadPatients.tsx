@@ -6,11 +6,16 @@ import { Alert, AlertTitle, AlertDescription } from "../ui/alert";
 import { useUploadPatients } from "@/hooks/beneficiaries/useUploadPatients";
 // import { downloadPatientsTemplate } from "@/utils/patient.utils";
 import { Spinner } from '../common/Spinner';
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export const UploadPatients = () => {
     const [file, setFile] = useState<File | null>(null);
-    const { uploadPatients, loading, error } = useUploadPatients();
     const [uploadStatus, setUploadStatus] = useState("idle");
+
+    const { uploadPatients, loading, error } = useUploadPatients();
+
+    const navigate = useNavigate();
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files?.[0];
@@ -27,6 +32,11 @@ export const UploadPatients = () => {
         if (!file) return;
 
         const result = await uploadPatients(file);
+        if(result.success) {
+            setFile(null);
+            toast.success('Patients uploaded successfully!');
+            navigate("/beneficiary");
+        }
         setUploadStatus(result.success ? "success" : "error");
     };
 

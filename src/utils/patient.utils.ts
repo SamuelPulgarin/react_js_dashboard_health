@@ -20,6 +20,9 @@ export const prefillPatientData = (patient: Patient, setValue: UseFormSetValue<F
   setValue("test_result", patient.test_result);
   setValue("best_contact_hour", patient.best_contact_hour);
   setValue("sex", patient.sex);
+  setValue("status", patient.status);
+  setValue("member_id", patient.member_id);
+  setValue("insurer", patient.insurer);
 };
 
 export const downloadPatientsTemplate = () => {

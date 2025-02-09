@@ -33,6 +33,9 @@ export const fetchPatientsWithRelations = async (id: string) => {
             social_security: patientResponse.social_security || '',
             test_result: patientResponse.test_result || '',
             zip_code: patientResponse.zip_code || null,
+            insurer: patientResponse.insurer || '',
+            member_id: patientResponse.member_id || '',
+            status: patientResponse.status || '',
             children: [],
             healthAmbassadors: patientResponse.healthAmbassadors || null,
         };
@@ -53,6 +56,7 @@ export const fetchPatientsWithRelations = async (id: string) => {
             full_name: childDoc.full_name || '',
             patients: childDoc.patients || '',
             sex: childDoc.sex || 'other',
+            social_security: childDoc.social_security || '',
         }));
 
         return { ...patient, children };
@@ -135,6 +139,9 @@ export const fetchPatientsWithRelationsAndFilters = async (limit = 50, offset = 
                 social_security: doc.social_security || '',
                 test_result: doc.test_result || '',
                 zip_code: doc.zip_code || null,
+                status: doc.status || '',
+                insurer: doc.insurer || '',
+                member_id: doc.member_id || '',
                 children: [], // Inicialmente vacío hasta obtener los hijos
                 healthAmbassadors: doc.healthAmbassadors || null,
             }));
@@ -172,6 +179,9 @@ export const fetchPatientsWithRelationsAndFilters = async (limit = 50, offset = 
                 social_security: doc.social_security || '',
                 test_result: doc.test_result || '',
                 zip_code: doc.zip_code || null,
+                status: doc.status || '',
+                insurer: doc.insurer || '',
+                member_id: doc.member_id || '',
                 children: [],
                 healthAmbassadors: doc.healthAmbassadors || null,
             }));
@@ -194,6 +204,7 @@ export const fetchPatientsWithRelationsAndFilters = async (limit = 50, offset = 
                         full_name: childDoc.full_name || '',
                         patients: childDoc.patients || '',
                         sex: childDoc.sex || 'other',
+                        social_security: childDoc.social_security || '',
                     }));
 
                     return { ...patient, children };
@@ -226,6 +237,9 @@ export const updatePatient = async (patientId: string, data: FormValues, navigat
             social_security: data.social_security,
             test_result: data.test_result,
             best_contact_hour: data.best_contact_hour,
+            status: data.status,
+            insurer: data.insurer,
+            member_id: data.member_id,
             healthAmbassadors: data.healthAmbassador // relationship
         });
 
@@ -282,6 +296,9 @@ export const fetchDataForChart = async () => {
             test_result: doc.test_result || "",
             zip_code: doc.zip_code || null,
             children: doc.children || [],
+            status: doc.status || "",
+            insurer: doc.insurer || "",
+            member_id: doc.member_id || "",
             healthAmbassadors: doc.healthAmbassadors || null,
         }));
     } catch (error) {

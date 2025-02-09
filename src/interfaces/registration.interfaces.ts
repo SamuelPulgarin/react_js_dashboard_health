@@ -15,6 +15,7 @@ export type Child = {
     name: string;
     dob: string;
     sex: string;
+    social_security: string;
 }
 
 export interface FormValues {
@@ -41,6 +42,5 @@ export interface FormValues {
         dob: string;
         sex: string;
         social_security: string;
-
     }[];
 }

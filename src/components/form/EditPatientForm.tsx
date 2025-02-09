@@ -141,15 +141,35 @@ export const EditPatientForm = () => {
         </div>
 
         {/* Additional validations for other fields */}
-        {/* HIV Test Date */}
-        <div>
-          <Label htmlFor="hivTestDate">HIV Test Date</Label>
-          <Input
-            id="hivTestDate"
-            type="date"
-            {...register("hiv_test", HIV_TEST_DATE)}
-          />
-          {errors.hiv_test && <p className="text-red-600">{errors.hiv_test.message}</p>}
+        {/* HIV Test Date, Insurer, Member ID */}
+        <div className="grid grid-cols-3 gap-4">
+          <div>
+            <Label htmlFor="hivTestDate">HIV Test Date</Label>
+            <Input
+              id="hivTestDate"
+              type="date"
+              {...register("hiv_test", HIV_TEST_DATE)}
+            />
+            {errors.hiv_test && <p className="text-red-600">{errors.hiv_test.message}</p>}
+          </div>
+          <div>
+            <Label htmlFor="insurer">Insurer</Label>
+            <Input
+              id="insurer"
+              placeholder="Enter Insurer"
+              {...register("insurer")}
+            />
+            {errors.insurer && <p className="text-red-500">{errors.insurer.message}</p>}
+          </div>
+          <div>
+            <Label htmlFor="member_id">Member id</Label>
+            <Input
+              id="member_id"
+              placeholder="Enter id"
+              {...register("member_id")}
+            />
+            {errors.member_id && <p className="text-red-500">{errors.member_id.message}</p>}
+          </div>
         </div>
 
         {/* Additional Info */}
@@ -167,6 +187,28 @@ export const EditPatientForm = () => {
             {...register("social_security", SOCIAL_SECURITY)}
           />
           {errors.social_security && <p className="text-red-600">{errors.social_security.message}</p>}
+        </div>
+
+        {/* Test Result and Status */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="testResult">Test Result</Label>
+            <Input
+              id="testResult"
+              {...register("test_result")}
+              readOnly
+            />
+            {errors.test_result && <p className="text-red-600">{errors.test_result.message}</p>}
+          </div>
+          <div>
+            <Label htmlFor="status">Status</Label>
+            <Input
+              id="status"
+              {...register("status")}
+              readOnly
+            />
+            {errors.status && <p className="text-red-600">{errors.status.message}</p>}
+          </div>
         </div>
 
         {/* Best Contact Hour */}

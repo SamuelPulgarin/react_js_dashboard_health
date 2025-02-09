@@ -2,6 +2,7 @@ import { HealthAmbassador } from "@/interfaces/registration.interfaces";
 import { fetchHealthAmbassadors, uploadPatientsToDatabase } from "@/services/registration.services";
 import { formatTime, parseChildren } from "@/utils/form.utils";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import * as XLSX from "xlsx";
 
 export const useUploadPatients = () => {
@@ -77,8 +78,10 @@ export const useUploadPatients = () => {
       const response = await uploadPatientsToDatabase(updatedPatients);
       setLoading(false);
 
+      console.log(response.success);
       if (!response.success) {
-        throw new Error("Failed to upload patients to the database.");
+        toast.error("Failed to upload patients to the database.");
+        return { success: false };
       }
 
       return { success: true };

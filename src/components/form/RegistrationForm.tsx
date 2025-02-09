@@ -209,7 +209,7 @@ export const RegistrationForm = () => {
                                 </Button>
                             </div>
 
-                            {/* HIV Test Date */}
+                            {/* HIV Test Date, Insurer, Member id */}
                             <div className="grid grid-cols-3 gap-4">
                                 <div>
                                     <Label htmlFor="hivTestDate">HIV Test Date</Label>
@@ -240,8 +240,6 @@ export const RegistrationForm = () => {
                                 </div>
                             </div>
 
-
-
                             {/* Additional Info */}
                             <div>
                                 <Label htmlFor="additionalInfo">Additional Info</Label>
@@ -263,7 +261,7 @@ export const RegistrationForm = () => {
                                 {errors.social_security && <p className="text-red-500">{errors.social_security.message}</p>}
                             </div>
 
-                            {/* Test Result || status*/}
+                            {/* Test Result, status*/}
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <Label htmlFor="testResult">Test Result</Label>
