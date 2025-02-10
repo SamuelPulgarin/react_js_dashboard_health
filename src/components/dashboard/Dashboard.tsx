@@ -1,22 +1,5 @@
-import { useMemo } from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line,
-  AreaChart,
-  Area,
-} from "recharts";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -36,10 +19,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useFilteredPatients } from "../../hooks/dashboard/useFilteredPatients";
-import { getAreaChartData, getBarChartData, getLineChartData, getPieChartData } from "../../utils/dashboard.utils";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Label } from "../ui/label";
 import { DateRange as DayPickerDateRange } from 'react-day-picker';
+import BarChartByMonth from "./BarChartByMonthAndSex";
+import LineChartByYear from "./LineChartByYearAndSex";
+import PieChartExample from "./PieChartByTestResult";
+import BarChartByAgeRange from "./BarChartByAgeRange";
 
 interface Props {
   patients: Patient[];
@@ -47,15 +33,7 @@ interface Props {
 
 export const Dashboard = ({ patients }: Props) => {
 
-  const { applyFilters, filteredPatients, date, setDate, minAge, setMinAge, maxAge, setMaxAge, sex, setSex } = useFilteredPatients(patients);
-
-  const filteredPatientsArray = filteredPatients();
-  const barChartData = useMemo(() => getBarChartData(filteredPatientsArray), [filteredPatientsArray]);
-  const pieChartData = useMemo(() => getPieChartData(filteredPatientsArray), [filteredPatientsArray]);
-  const lineChartData = useMemo(() => getLineChartData(filteredPatientsArray), [filteredPatientsArray]);
-  const areaChartData = useMemo(() => getAreaChartData(filteredPatientsArray), [filteredPatientsArray]);
-
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  const { applyFilters, date, setDate, minAge, setMinAge, maxAge, setMaxAge, sex, setSex } = useFilteredPatients(patients);
 
   return (
     <div className="mx-auto py-10">
@@ -157,81 +135,11 @@ export const Dashboard = ({ patients }: Props) => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 place-items-center xl:grid-cols-2 gap-8">
-        {/* Bar Chart */}
-        <div className="bg-white p-4 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Bar Chart: Sex Distribution</h2>
-          <BarChart width={400} height={300} data={barChartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="value" fill="#8884d8" />
-          </BarChart>
-        </div>
-
-        {/* Pie Chart */}
-        <div className="bg-white p-4 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Pie Chart: Test Results</h2>
-          <PieChart width={400} height={300}>
-            <Pie
-              data={pieChartData}
-              cx={200}
-              cy={150}
-              labelLine={false}
-              outerRadius={80}
-              fill="#8884d8"
-              dataKey="value"
-            >
-              {pieChartData.map((_, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        </div>
-
-        {/* Line Chart */}
-        <div className="bg-white p-4 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Line Chart: Age Distribution by Range</h2>
-          <LineChart width={400} height={300} data={lineChartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="ageRange" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="count" stroke="#8884d8" />
-          </LineChart>
-        </div>
-
-        {/* Area Chart */}
-        <div className="bg-white p-4 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Area Chart: Patients with Children by Age Range</h2>
-          <AreaChart
-            width={400}
-            height={300}
-            data={areaChartData}
-            margin={{
-              top: 10,
-              right: 30,
-              left: 0,
-              bottom: 0,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="ageRange" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Area type="monotone" dataKey="count" stroke="#8884d8" fill="#8884d8" />
-          </AreaChart>
-        </div>
-
+      <div className="grid grid-cols-1 place-items-center lg:grid-cols-2 gap-8 max-w-screen-lg mx-auto">
+        <BarChartByMonth patients={patients} />
+        <LineChartByYear patients={patients} />
+        <PieChartExample patients={patients} />
+        <BarChartByAgeRange patients={patients} />
       </div>
     </div>
   );

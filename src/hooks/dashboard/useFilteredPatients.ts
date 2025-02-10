@@ -4,7 +4,6 @@ import { Patient } from '../../interfaces/patient.interfaces';
 import { DateRange } from '../../interfaces/dashboard.interfaces';
 import { addDays } from '../../utils/dashboard.utils'
 
-
 export const useFilteredPatients = (patients: Patient[]) => {
   const [date, setDate] = useState<DateRange>({
     from: new Date(),
