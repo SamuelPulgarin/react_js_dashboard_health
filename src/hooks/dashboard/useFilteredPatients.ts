@@ -1,58 +1,68 @@
 // hooks/useFilteredPatients.ts
 import { useState } from "react";
 import { Patient } from '../../interfaces/patient.interfaces';
-import { DateRange } from '../../interfaces/dashboard.interfaces';
-import { addDays } from '../../utils/dashboard.utils'
+
 
 export const useFilteredPatients = (patients: Patient[]) => {
-  const [date, setDate] = useState<DateRange>({
-    from: new Date(),
-    to: addDays(new Date(), 7),
-  });
-  const [minAge, setMinAge] = useState<string>("18");
-  const [maxAge, setMaxAge] = useState<string>("65");
-  const [sex, setSex] = useState<string>("all");
-
-  const [appliedFilters, setAppliedFilters] = useState({
-    date,
-    minAge,
-    maxAge,
-    sex,
-  });
-
-  const applyFilters = () => {
-    setAppliedFilters({ date, minAge, maxAge, sex });
+  // const [date, setDate] = useState<DateRange>({
+  //   from: new Date(),
+  //   to: addDays(new Date(), 7),
+  // });
+  const initialState = {
+    minAge: "18",
+    maxAge: "65",
+    sex: "all",
+    selectedYear: "all",
+    status: "all",
   };
 
-  const filteredPatients = () => {
-    if (!patients || !Array.isArray(patients)) return [];
-    return patients.filter((patient) => {
-      const linkageDate = new Date(patient.linkage_date);
-      const isWithinDateRange =
-      linkageDate >= (appliedFilters?.date ?? {}).from &&
-  linkageDate <= (appliedFilters?.date ?? {}).to;
+  const [minAge, setMinAge] = useState<string>(initialState.minAge);
+  const [maxAge, setMaxAge] = useState<string>(initialState.maxAge);
+  const [sex, setSex] = useState<string>(initialState.sex);
+  const [selectedYear, setSelectedYear] = useState<string | undefined>(initialState.selectedYear);
+  const [status, setStatus] = useState<string | undefined>(initialState.status);
+  const [filteredPatients, setFilteredPatients] = useState<Patient[]>(patients);
 
-      const isWithinAgeRange =
-        patient.age >= parseInt(appliedFilters.minAge, 10) &&
-        patient.age <= parseInt(appliedFilters.maxAge, 10);
+  const applyFilters = () => {
+    const filtered = patients.filter((patient) => {
+      const patientAge = patient.age;
+      const patientYear = new Date(patient.linkage_date).getFullYear();
+      const patientStatus = patient.status;
+      const patientSex = patient.sex;
 
-      const isSexMatch =
-        appliedFilters.sex === "all" || patient.sex === appliedFilters.sex;
-
-      return isWithinDateRange && isWithinAgeRange && isSexMatch;
+      return (
+        patientAge >= Number(minAge) &&
+        patientAge <= Number(maxAge) &&
+        (selectedYear === "all" || patientYear.toString() === selectedYear) &&
+        (status === "all" || patientStatus === status) &&
+        (sex === "all" || patientSex === sex)
+      );
     });
+    setFilteredPatients(filtered);
+  };
+
+  const resetFilters = () => {
+    setMinAge(initialState.minAge);
+    setMaxAge(initialState.maxAge);
+    setSex(initialState.sex);
+    setSelectedYear(initialState.selectedYear);
+    setStatus(initialState.status);
+    setFilteredPatients(patients);
   };
 
   return {
-    filteredPatients,
-    date,
-    setDate,
     minAge,
     setMinAge,
     maxAge,
     setMaxAge,
     sex,
     setSex,
+    selectedYear,
+    setSelectedYear,
+    status,
+    setStatus,
+    filteredPatients,
     applyFilters,
+    resetFilters,
   };
 };
