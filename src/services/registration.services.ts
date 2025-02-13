@@ -3,7 +3,6 @@ import { FormValues, HealthAmbassador } from "../interfaces/registration.interfa
 import { databases, ID } from "../lib/appwrite/config";
 import { toast } from 'react-hot-toast';
 import { retryWithBackoff } from "@/utils/form.utils";
-import { Patient } from "@/interfaces/patient.interfaces";
 
 const formatDate = (dateString: string): string | null => {
     if (!dateString) return null; // Evita errores con valores vacíos
