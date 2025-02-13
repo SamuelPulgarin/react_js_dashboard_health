@@ -1,3 +1,5 @@
+import { AppwriteException } from "appwrite";
+
 export const formatDate = (dateString: string) => {
     return new Date(dateString).toISOString().split('T')[0];
 };
@@ -46,4 +48,21 @@ export const parseChildren = (childrenData: string) => {
         console.error("Error parsing children data:", error);
         return [];
     }
+};
+
+export const retryWithBackoff = async <T>(fn: () => Promise<T>, retries = 5, delay = 1000): Promise<T> => {
+    for (let attempt = 0; attempt < retries; attempt++) {
+        try {
+            return await fn();
+        } catch (error: any) {
+            if (error instanceof AppwriteException && error.code === 429 && attempt < retries - 1) {
+                console.warn(`Rate limit exceeded. Retrying in ${delay}ms...`);
+                await new Promise(resolve => setTimeout(resolve, delay));
+                delay *= 2;
+            } else {
+                throw error;
+            }
+        }
+    }
+    return Promise.reject(new Error('All retries failed'));
 };

@@ -25,7 +25,6 @@ export const Dashboard = ({ patients }: Props) => {
 
   const { applyFilters, filteredPatients, resetFilters, minAge, setMinAge, maxAge, setMaxAge, sex, setSex, selectedYear, setSelectedYear, status, setStatus } = useFilteredPatients(patients);
 
-  // Extraer los años únicos de linkage_date
   const availableYears = useMemo(() => {
     const years = new Set<number>();
 
@@ -36,7 +35,7 @@ export const Dashboard = ({ patients }: Props) => {
       }
     });
 
-    return Array.from(years).sort((a, b) => b - a); // Ordenar de mayor a menor
+    return Array.from(years).sort((a, b) => b - a);
   }, [patients]);
 
   return (
