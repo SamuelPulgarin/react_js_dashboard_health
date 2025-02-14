@@ -58,7 +58,7 @@ const BarChartByAgeRange = ({ patients }: Props) => {
       title: { text: "Count" },
     },
     title: {
-      text: "Patient Age Distribution by Gender",
+      text: "Patient Age Distribution",
       align: "center",
     },
     colors: ["#1E90FF", "#FF69B4", "#32CD32"], // Colores para male, female, other

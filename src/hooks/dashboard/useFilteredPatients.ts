@@ -12,7 +12,7 @@ export const useFilteredPatients = (patients: Patient[]) => {
     minAge: "18",
     maxAge: "65",
     sex: "all",
-    selectedYear: "all",
+    selectedYear: new Date().getFullYear().toString(),
     status: "all",
   };
 
@@ -45,7 +45,7 @@ export const useFilteredPatients = (patients: Patient[]) => {
     setMinAge(initialState.minAge);
     setMaxAge(initialState.maxAge);
     setSex(initialState.sex);
-    setSelectedYear(initialState.selectedYear);
+    setSelectedYear(new Date().getFullYear().toString());
     setStatus(initialState.status);
     setFilteredPatients(patients);
   };

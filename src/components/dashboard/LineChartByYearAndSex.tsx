@@ -52,7 +52,17 @@ const LineChartByYearAndSex = ({ patients }: Props) => {
   const options: ApexOptions = {
     chart: {
       id: "line-chart",
-      toolbar: { show: true },
+      toolbar: {
+        show: true,
+        tools: {
+          zoom: false,
+          zoomin: false,
+          zoomout: false,
+          pan: false,
+          reset: false,
+          download: true,
+        },
+      },
     },
     xaxis: {
       categories: years, // Años procesados dinámicamente

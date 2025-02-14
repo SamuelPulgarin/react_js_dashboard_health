@@ -15,7 +15,7 @@ import BarChartByMonth from "./BarChartByMonthAndSex";
 import LineChartByYear from "./LineChartByYearAndSex";
 import PieChartExample from "./PieChartByTestResult";
 import BarChartByAgeRange from "./BarChartByAgeRange";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 interface Props {
   patients: Patient[];
@@ -35,8 +35,15 @@ export const Dashboard = ({ patients }: Props) => {
       }
     });
 
+    const currentYear = new Date().getFullYear();
+    years.add(currentYear);
+
     return Array.from(years).sort((a, b) => b - a);
   }, [patients]);
+
+  useEffect(() => {
+    applyFilters();
+  }, []);
 
   return (
     <div className="mx-auto py-10">
