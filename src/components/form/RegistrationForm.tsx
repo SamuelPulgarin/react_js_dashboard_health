@@ -4,13 +4,14 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { X } from 'lucide-react'
-import { useFieldArray, useForm } from "react-hook-form"
+import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { useValidationForm } from "../../hooks/form/useValidationForm"
 import { FormValues } from '../../interfaces/registration.interfaces';
 import { useHealthAmbassador } from "../../hooks/form/useHealthAmbassador"
 import { useNavigate } from "react-router-dom"
 import { useRegistrationForm } from "../../hooks/form/useRegistrationForm"
 import { Spinner } from "../common/Spinner"
+import { formatPhoneNumber, formatSocialSecurity } from "@/utils/form.utils"
 
 export const RegistrationForm = () => {
 
@@ -153,11 +154,20 @@ export const RegistrationForm = () => {
                                 </div>
                                 <div>
                                     <Label htmlFor="phone">Phone</Label>
-                                    <Input
-                                        id="phone"
-                                        type="tel"
-                                        placeholder="Enter phone number"
-                                        {...register("phone", PHONE)}
+                                    <Controller
+                                        name="phone"
+                                        control={control}
+                                        defaultValue=""
+                                        rules={PHONE}
+                                        render={({ field }) => (
+                                            <Input
+                                                id="phone"
+                                                type="tel"
+                                                placeholder="xxx-xxx-xxxx"
+                                                value={field.value}
+                                                onChange={(e) => field.onChange(formatPhoneNumber(e.target.value))}
+                                            />
+                                        )}
                                     />
                                     {errors.phone && <p className="text-red-500">{errors.phone.message}</p>}
                                 </div>
@@ -253,10 +263,20 @@ export const RegistrationForm = () => {
                             {/* Social Security */}
                             <div>
                                 <Label htmlFor="socialSecurity">Social Security</Label>
-                                <Input
-                                    id="socialSecurity"
-                                    placeholder="Enter social security number"
-                                    {...register("social_security", SOCIAL_SECURITY)}
+                                <Controller
+                                    name="social_security"
+                                    control={control}
+                                    defaultValue=""
+                                    rules={SOCIAL_SECURITY}
+                                    render={({ field }) => (
+                                        <Input
+                                            id="social_security"
+                                            type="text"
+                                            placeholder="xxx-xx-xxxx"
+                                            value={field.value}
+                                            onChange={(e) => field.onChange(formatSocialSecurity(e.target.value))}
+                                        />
+                                    )}
                                 />
                                 {errors.social_security && <p className="text-red-500">{errors.social_security.message}</p>}
                             </div>

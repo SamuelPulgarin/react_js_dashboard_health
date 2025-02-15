@@ -10,6 +10,28 @@ export const formatTime = (dateString: string) => {
     return `${year}-${month}-${day}`; // Convertir a formato YYYY-MM-DD
 };
 
+export const formatPhoneNumber = (value: string) => {
+    const cleaned = value.replace(/\D/g, "");
+    const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
+
+    if (!match) return value;
+
+    return [match[1], match[2], match[3]]
+        .filter(Boolean)
+        .join("-");
+};
+
+export const formatSocialSecurity = (value: string) => {
+    const cleaned = value.replace(/\D/g, "");
+    const match = cleaned.match(/^(\d{0,3})(\d{0,2})(\d{0,4})$/);
+
+    if (!match) return value;
+
+    return [match[1], match[2], match[3]]
+        .filter(Boolean)
+        .join("-");
+};
+
 export const parseChildren = (childrenData: string) => {
     if (!childrenData) return [];
 
