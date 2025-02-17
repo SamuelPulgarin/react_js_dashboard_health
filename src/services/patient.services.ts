@@ -1,4 +1,4 @@
-import { databases, Query } from "../lib/appwrite/config";
+import { databases, ID, Query, storage } from "../lib/appwrite/config";
 import { Patient, Child, FilterOptions } from '../interfaces/patient.interfaces';
 import { FormValues } from '../interfaces/registration.interfaces';
 import toast from "react-hot-toast";
@@ -222,6 +222,19 @@ export const fetchPatientsWithRelationsAndFilters = async (limit = 50, offset = 
 
 export const updatePatient = async (patientId: string, data: FormValues, navigate: Function) => {
     try {
+        let pdfFileId = null;
+
+        if(data.status === "refund" && data.PDFFile?.length > 0) {
+            const pdfFile = data.PDFFile[0];
+            const pdfFileResponse = await storage.createFile(
+                "67ad54590018e734ccfd",
+                ID.unique(),
+                pdfFile
+            );
+
+            pdfFileId = pdfFileResponse.$id;
+        }
+
         await databases.updateDocument(`66f8843900293602ad8f`, `66f89ac7002b428ca133`, patientId, {
             name: data.name,
             last_name: data.last_name,
@@ -240,7 +253,9 @@ export const updatePatient = async (patientId: string, data: FormValues, navigat
             status: data.status,
             insurer: data.insurer,
             member_id: data.member_id,
-            healthAmbassadors: data.healthAmbassador // relationship
+
+            healthAmbassadors: data.healthAmbassador, // relationship
+            PDFFile: pdfFileId,
         });
 
         toast.success('Patient updated successfully!');

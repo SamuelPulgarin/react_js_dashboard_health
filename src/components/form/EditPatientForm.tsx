@@ -10,14 +10,16 @@ import { Spinner } from "../common/Spinner"
 import { prefillPatientData } from "../../utils/patient.utils"
 import { updatePatient } from "../../services/patient.services"
 import { useFetchPatient } from "@/hooks/patients/useFetchPatient"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useEffect } from "react"
 
 export const EditPatientForm = () => {
   const { patient } = useFetchPatient();
-  const { handleSubmit, register, setValue, formState: { errors } } = useForm<FormValues>();
+  const { handleSubmit, register, setValue, watch, formState: { errors } } = useForm<FormValues>();
   const { LINKAGE_DATE, NAME, LAST_NAME, EMAIL, PHONE, AGE, DOB, FULL_ADDRESS, HIV_TEST_DATE, SOCIAL_SECURITY, BEST_CONTACT_HOUR } = useValidationForm();
 
   const navigate = useNavigate();
+  const statusValue = watch('status');
 
   useEffect(() => {
     if (patient) {
@@ -202,14 +204,46 @@ export const EditPatientForm = () => {
           </div>
           <div>
             <Label htmlFor="status">Status</Label>
-            <Input
-              id="status"
-              {...register("status")}
-              readOnly
-            />
-            {errors.status && <p className="text-red-600">{errors.status.message}</p>}
+            <Select
+              value={statusValue || ""}
+              onValueChange={(value: string) => setValue('status', value.toLowerCase())}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="active">ACTIVE</SelectItem>
+                <SelectItem value="inactive">INACTIVE</SelectItem>
+                <SelectItem value="refund">REFUND</SelectItem>
+              </SelectContent>
+            </Select>
+            {errors.status && <p className="text-red-500">{errors.status.message}</p>}
           </div>
         </div>
+
+        {statusValue === "refund" && (
+          <div className="mt-4">
+            <Label htmlFor="PDFFile">Upload PDF</Label>
+            <Input
+              id="PDFFile"
+              type="file"
+              accept=".pdf"
+              {...register("PDFFile", {
+                required: statusValue === "refund" ? "PDF is required for REFUND status" : false,
+                validate: (fileList) => {
+                  if (statusValue === "refund" && (!fileList || fileList.length === 0)) {
+                    return "PDF file is required for REFUND status";
+                  }
+                  if (fileList && fileList.length > 0 && fileList[0].type !== "application/pdf") {
+                    return "Only PDF files are allowed";
+                  }
+                  return true;
+                },
+              })}
+            />
+            {errors.PDFFile && <p className="text-red-500">{errors.PDFFile.message}</p>}
+          </div>
+        )}
 
         {/* Best Contact Hour */}
         <div>

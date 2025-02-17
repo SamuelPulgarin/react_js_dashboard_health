@@ -37,6 +37,7 @@ export interface FormValues {
     insurer: string;
     member_id: string;
     status: string
+    PDFFile: FileList;
     children: {
         name: string;
         dob: string;

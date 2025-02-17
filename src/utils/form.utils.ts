@@ -32,6 +32,15 @@ export const formatSocialSecurity = (value: string) => {
         .join("-");
 };
 
+export const formatTimeInput = (value: string) => {
+    const cleaned = value.replace(/\D/g, "");
+    const match = cleaned.match(/^(\d{0,2})(\d{0,2})$/);
+
+    if (!match) return value;
+
+    return [match[1], match[2]].filter(Boolean).join(":");
+};
+
 export const parseChildren = (childrenData: string) => {
     if (!childrenData) return [];
 

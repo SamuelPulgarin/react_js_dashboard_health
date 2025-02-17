@@ -11,7 +11,7 @@ import { useHealthAmbassador } from "../../hooks/form/useHealthAmbassador"
 import { useNavigate } from "react-router-dom"
 import { useRegistrationForm } from "../../hooks/form/useRegistrationForm"
 import { Spinner } from "../common/Spinner"
-import { formatPhoneNumber, formatSocialSecurity } from "@/utils/form.utils"
+import { formatPhoneNumber, formatSocialSecurity, formatTimeInput } from "@/utils/form.utils"
 
 export const RegistrationForm = () => {
 
@@ -311,7 +311,6 @@ export const RegistrationForm = () => {
                                         <SelectContent>
                                             <SelectItem value="ACTIVE">ACTIVE</SelectItem>
                                             <SelectItem value="INACTIVE">INACTIVE</SelectItem>
-                                            <SelectItem value="REFUND">REFUND</SelectItem>
                                         </SelectContent>
                                     </Select>
                                     {errors.status && <p className="text-red-500">{errors.status.message}</p>}
@@ -320,11 +319,21 @@ export const RegistrationForm = () => {
 
                             {/* Best Contact Hour */}
                             <div>
-                                <Label htmlFor="bestContactHour">Best Contact Hour</Label>
-                                <Input
-                                    id="bestContactHour"
-                                    placeholder="Enter best contact hour"
-                                    {...register("best_contact_hour", BEST_CONTACT_HOUR)}
+                                <Label htmlFor="best_contact_hour">Best Contact Hour</Label>
+                                <Controller
+                                    name="best_contact_hour"
+                                    control={control}
+                                    defaultValue=""
+                                    rules={BEST_CONTACT_HOUR}
+                                    render={({ field }) => (
+                                        <Input
+                                            id="best_contact_hour"
+                                            type="text"
+                                            placeholder="HH:MM"
+                                            value={field.value}
+                                            onChange={(e) => field.onChange(formatTimeInput(e.target.value))}
+                                        />
+                                    )}
                                 />
                                 {errors.best_contact_hour && <p className="text-red-500">{errors.best_contact_hour.message}</p>}
                             </div>
